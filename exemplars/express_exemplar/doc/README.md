@@ -1,7 +1,7 @@
 # Express Server Exemplar
 
 ## Overview
-This exemplar shows how to set up a simple express server that contains endpoints that respond to one of each of the HTTP request methods (GET/POST/PUT/DELETE). This exemplar is meant to show the basic setup of a express server and also how to recieve and parse request paramaters sent through the body of the HTML request in JSON format. 
+This exemplar shows how to set up a simple express server that contains endpoints that respond to one of each of the HTTP request methods (GET/POST/PUT/DELETE). This exemplar is meant to show the basic setup of a express server and also how to recieve and parse request paramaters sent through the body of the HTML request in JSON format. To run, first run `npm install` to create node modules files, and then run node `lib/express_server_setup.js` or `npm start`.
 
 ### GET
 An endpoint that responds to HTTP GET requests should be set up using the app.get(), where app is the variable name of the created express application. A GET endpoint will typically get information from the server's database to send back to the client. For this example, an incoming request would have a recipe id or name included in JSON format in the body of the request in this general format: `{"id": 123, "name": "recipeName"}`. This exemplar shows how this id and name would be extracted from the body of the request. This id or name would then be used to call a function that would grab the correct recipe from the database, and then this recipe information would be sent back to the client with the JSON format: `{"name": "recipeName", "calories": 100, "servings": 2, "ingredients": ["ingredient1", "ingredient2"]}`.
