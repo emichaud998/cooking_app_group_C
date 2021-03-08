@@ -138,11 +138,14 @@ function addCardRow() {
     // Create a new div element which in this case will be the div that holds a row of card elements
     var cardRow = document.createElement('div');
     // Add classes to the cardRow div element
-    cardRow.classList.add('card-deck', 'row', 'mb-3');
+    cardRow.classList.add('row', 'row-cols-1', 'row-cols-md-3', 'mb-3');
     // Set the id of the cardRow div element
     cardRow.id = "cardRowAdd";
     // Adding 3 new cards to the cardRow div element
     for (var i = 0; i < 3; i++) {
+        // Create column div to hold the card
+        var col = document.createElement('div');
+        col.classList.add('col');
         // Create card div element- will hold the body of the card
         var card = document.createElement('div');
         card.classList.add('card');
@@ -187,8 +190,10 @@ function addCardRow() {
         cardBody.appendChild(a);
         // Add the cardBody div element (which contains all the images and text from above) to the card element
         card.appendChild(cardBody);
-        // Add the card element (which now contains the cardBody) to the cardRow div
-        cardRow.appendChild(card);
+        // Add the card element (which now contains the cardBody) to the col div
+        col.appendChild(card);
+        // Add the col element (which now contains the card) to the cardRow div
+        cardRow.appendChild(col);
     }
     // After all 3 cards have been created and added to the cardRow div, add this new row of cards to the parent div
     parentContainer.appendChild(cardRow);
