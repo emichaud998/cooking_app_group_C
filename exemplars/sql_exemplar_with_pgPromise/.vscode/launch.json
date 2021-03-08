@@ -7,20 +7,6 @@
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}\\src\\test.ts",
-            "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ],
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "type": "pwa-node",
-            "request": "launch",
             "name": "Launch Database",
             "skipFiles": [
                 "<node_internals>/**"
