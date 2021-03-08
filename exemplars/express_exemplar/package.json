@@ -1,8 +1,12 @@
 {
-  "name": "express_server_exemplar",
+  "name": "express_exemplar",
   "version": "1.0.0",
   "description": "",
   "main": "lib/express_server_setup.js",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
