@@ -8,6 +8,10 @@
 
     * I'm a junior majoring in computer science, and I'm fascinated by web technologies, especially things related to system architecture. By doing this project, I hope to learn essential skills for creating performance and optimized applications that could serve thousands of users. I could contribute to the team on the backend side with my working experience as an SE intern.
 
+## Andrew Leger
+
+    I'm a senior majoring in Computer Science, and will be graduating at the end of this semester. Most of my computer science courses of choice have related to web programming, database design, and networks in general, so that's 3/4 people in the group who like working on backend stuff. I'm familiar with Javascript, am quickly gaining familiarity with typescript like my groupmembers, and know how to do things like express servers, postgres databases (as well as a bit of mongo and mapReduce), and bootstrap. Much of which was learned in cs326 and cs445 (great classes). Languages I'm confident working in: C, C++, Python, JS and to a lesser extent Typescript, and of course SQL.
+
 ## Thanh Phan
 
     * Hi, I am Thanh Phan and I am a junior majoring in computer science. I am from Vietnam which is exactly 12 hours ahead of Umass. I am mostly a backend guy but I have some frontend experience also. I have a lot of experience working in the backend such as: SQL database, APIs, organising the codebase... For frontend, I am mostly familiar with basic html/css and Bootstrap but I am willing to learn React/Angular if needed. I am fascinated by this course since my dream job would be a software architect in the future.
