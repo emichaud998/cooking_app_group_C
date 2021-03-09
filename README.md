@@ -4,7 +4,10 @@ Our project idea is to create a cooking recipe application using microservices t
 
 # Exemplars
 
+* [ESLint and Launch JSON Exemplar](exemplars/eslint_and_launchJson_exemplar/doc/README.md) -Author: Andrew Leger
 * [Express Server Exemplar](exemplars/express_exemplar/doc/README.md) -Author: Emily Michaud
 * [Django with Docker Exemplar](exemplars/simple-django-with-docker/README.md) -Author: Duy Pham
 * [TypeScript Crud App Exemplar](exemplars/simple-ts-crud-app/doc/README.md) -Author: Duy Pham
+* [SQL Exemplar with pgPromise](exemplars/sql_exemplar_with_pgPromise/doc/README.md) -Author: Andrew Leger
 * [TypeScript HTML Exemplar](exemplars/typescript_html_exemplar/doc/README.md) -Author: Emily Michaud
+
