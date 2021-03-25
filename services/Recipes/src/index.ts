@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { CreateRecipe, DeleteRecipe, GetRecipeByID, GetRecipes } from "./crud";
+import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesByName, FilterRecipes } from "./crud";
 //import { IRecipes, IIngredients, IRecipeSteps } from "./models/recipes";
 
 const app = express();
@@ -15,8 +15,6 @@ mongoose.connect(uri, {
   useUnifiedTopology: true,
   useFindAndModify: false,
 });
-
-
 
 const db = mongoose.connection;
 
@@ -54,8 +52,26 @@ db.once("open", () => {
     }
   });
 
+  app.get("/get_recipe_by_name", async (req, res) => {
+    if (!req.query.name) {
+      res.status(400);
+      return res.json({ error: "Missing 'name' field" });
+    }
+    const name = String(req.query.name);
+    try {
+      const recipes = await GetRecipesByName({ name });
+      if (recipes === null) {
+        return res.json({ message: "There are no recipes containing given name" });
+      } else {
+        return res.json({ recipes: recipes });
+      }
+    } catch (error: any) {
+      res.status(500);
+      return res.json({ error: "Internal server error" });
+    }
+  });
+
   app.post("/create_recipe", async (req, res) => {
-    console.log(req.body)
     if (!req.body.recipe) {
       res.status(400);
       return res.json({ error: "Missing 'recipe' field" });
@@ -78,6 +94,72 @@ db.once("open", () => {
         return res.json({ error: "User with given email already existed" });
       } else {
         res.status(500);
+        return res.json({ error: "Internal server error" });
+      }
+    }
+  });
+
+  app.post("/filter_recipes", async (req, res) => {
+    let categoryQuery= {}
+    let mealTypeQuery= {}
+    let ingredientIncludeQuery={}
+    let ingredientExcludeQuery={}
+    let filterQuery = [];
+
+    if (req.body.filter_category && JSON.stringify(req.body.filter_category.length) !== `{}`) {
+        let categoryObjects = req.body.filter_category
+        let categoryQueryArr = [];
+        for (let key in categoryObjects) {
+            let value = categoryObjects[key];
+            key = "dietary_categories."+key;
+            let categoryObj = {[key]: value};
+            categoryQueryArr.push(categoryObj);
+        }
+        categoryQuery = { $and: categoryQueryArr}
+        filterQuery.push(categoryQuery);
+    }
+
+    if (req.body.meal_type && JSON.stringify(req.body.meal_type.length) !== `{}`) {
+        let mealTypeObjects = req.body.meal_type
+        let mealTypeQueryArr = [];
+        for (let key in mealTypeObjects) {
+            let value = mealTypeObjects[key];
+            key = "meal_type."+key;
+            let mealTypeObj = {[key]: value};
+            mealTypeQueryArr.push(mealTypeObj);
+        }
+        mealTypeQuery = { $and: mealTypeQueryArr}
+        filterQuery.push(mealTypeQuery);
+    }
+
+    if (req.body.filter_ingredient_contains && req.body.filter_ingredient_contains.length > 0) {
+        ingredientIncludeQuery = { "ingredients.ingredient_name": { $in:  req.body.filter_ingredient_contains} }
+        filterQuery.push(ingredientIncludeQuery);
+    }else if (req.body.filter_ingredient_only && req.body.filter_ingredient_only.length > 0) {
+        ingredientIncludeQuery = { "ingredients.ingredient_name": { $all:  req.body.filter_ingredient_only} }
+        filterQuery.push(ingredientIncludeQuery);
+    }
+
+    if (req.body.filter_ingredient_exclude && req.body.filter_ingredient_exclude.length > 0) {
+        ingredientExcludeQuery = req.body.filter_ingredient_exclude;
+        filterQuery.push(ingredientExcludeQuery);
+    }
+
+    if (filterQuery.length < 0) {
+        res.status(409);
+        return res.json({ error: "Must pass in filter parameters" });
+    }
+
+    try {
+      const recipes = await FilterRecipes({filterQuery});
+      return res.json({ count: recipes.length, recipes: recipes });
+    } catch (error: any) {
+      if (error.code === 11000) {
+        res.status(409);
+        return res.json({ error: "User with given email already existed" });
+      } else {
+        res.status(500);
+        console.log(error)
         return res.json({ error: "Internal server error" });
       }
     }
@@ -115,11 +197,30 @@ db.once("open", () => {
     }
     const id = String(req.query.id);
     try {
-      const user = await DeleteRecipe({ id });
-      if (user === null) {
-        return res.json({ message: "There is no user with given email" });
+      const recipe = await DeleteRecipeID({ id });
+      if (recipe === null) {
+        return res.json({ message: "There is no recipe with given id" });
       } else {
-        return res.json({ message: "User deleted", users: user });
+        return res.json({ message: "Recipe deleted", recipe: recipe });
+      }
+    } catch (error: any) {
+      res.status(500);
+      return res.json({ error: "Internal server error" });
+    }
+  });
+
+app.delete("/delete_recipe_by_name", async (req, res) => {
+    if (!req.query.name) {
+      res.status(400);
+      return res.json({ error: "Missing 'name' field" });
+    }
+    const name = String(req.query.name);
+    try {
+      const recipe = await DeleteRecipeName({ name });
+      if (recipe === null) {
+        return res.json({ message: "There is no recipe with given name" });
+      } else {
+        return res.json({ message: "Recipe deleted", recipe: recipe });
       }
     } catch (error: any) {
       res.status(500);

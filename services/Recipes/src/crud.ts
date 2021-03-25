@@ -15,6 +15,20 @@ export async function GetRecipeByID({
     });
 }
 
+export async function GetRecipesByName({
+  name,
+}: FilterQuery<IRecipes>): Promise<IRecipes[]> {
+  return Recipe.find(
+    { name: { $regex: String(name), $options: 'i'}}
+  )
+  .then((data: IRecipes[]) => {
+    return data;
+  })
+  .catch((error: Error) => {
+    throw error;
+  });
+}
+
 export async function GetRecipes(): Promise<IRecipes[]> {
   return Recipe.find({})
     .then((data: IRecipes[]) => {
@@ -53,7 +67,7 @@ export async function UpdateRecipe({
     });
 }*/
 
-export async function DeleteRecipe({
+export async function DeleteRecipeID({
   id,
 }: FilterQuery<IRecipes>): Promise<IRecipes | null> {
   return Recipe.findOneAndDelete({ _id: id })
@@ -63,4 +77,31 @@ export async function DeleteRecipe({
     .catch((error: Error) => {
       throw error;
     });
+}
+
+export async function DeleteRecipeName({
+  name,
+}: FilterQuery<IRecipes>): Promise<IRecipes | null> {
+  return Recipe.findOneAndDelete({ name: name })
+    .then((data: IRecipes | null) => {
+      return data;
+    })
+    .catch((error: Error) => {
+      throw error;
+    });
+}
+
+export async function FilterRecipes({
+  filterQuery,
+}: FilterQuery<IRecipes>): Promise<IRecipes[]> {
+  console.log(filterQuery)
+  return Recipe.find(
+    { $and: filterQuery}
+  )
+  .then((data: IRecipes[]) => {
+    return data;
+  })
+  .catch((error: Error) => {
+    throw error;
+  });
 }

@@ -68,7 +68,7 @@ const RecipeStepsSchema: Schema  = new Schema({
 });
 
 const RecipesSchema: Schema = new Schema({
-  name: { type: String, required: true, unique: true },
+  name: { type: String, required: true, unique: true},
   description: {type: String},
   prep_time: {type: Number}, // prep time in minutes
   cook_time: {type: Number}, // prep time in minutes
@@ -105,6 +105,5 @@ const RecipesSchema: Schema = new Schema({
   ingredients: [IngredientsSchema],
   recipe_steps: [RecipeStepsSchema]
 });
-
 
 export default mongoose.model<IRecipes>("Recipe", RecipesSchema);
