@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesByName, FilterRecipes, UpdateRecipeID, UpdateRecipeName, GetIngredients } from "./crudOperations";
+import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesLimit, GetRecipesByName, FilterRecipes, UpdateRecipeID, UpdateRecipeName, GetIngredients } from "./crudOperations";
 import { IRecipes, IIngredients, IRecipeSteps, RecipeCreate, RecipeFilter } from "./models/recipesModels";
 
 const app = express();
@@ -24,8 +24,21 @@ db.once("open", () => {
 
   // Returns all recipes with all information from DB
   app.get("/get_recipes", async (req, res) => {
+
+    // Skip by 0 entries if not provided, otherwise skip by skip parameter places into DB
+    let skip = 0;
+    if (req.query.skip && Number(String(req.query.skip)) > 0) {
+      skip = Number(String(req.query.skip))
+    }
     try {
-      const recipes = await GetRecipes();
+      let recipes = [];
+      // If there is a limit that is greater than 0, get only limited number of recipes, otherwise return all recipes
+      if (req.query.limit && Number(String(req.query.limit)) > 0) {
+        let limit = Number(String(req.query.limit))
+        recipes = await GetRecipesLimit(limit, skip);
+      } else {
+        recipes = await GetRecipes(skip);
+      }
       res.json({ count: recipes.length, recipes: recipes });
     } catch (error: any) {
       res.status(500);
@@ -115,13 +128,30 @@ db.once("open", () => {
   app.post("/filter_recipes", async (req, res) => {
     let filterQuery = createFilterQuery(req.body);
 
+    // Skip by 0 entries if not provided, otherwise skip by skip parameter places into DB
+    let skip = 0;
+    if (req.query.skip && Number(String(req.query.skip)) > 0) {
+      skip = Number(String(req.query.skip))
+    }
+
     // If no filtering parameters supplied, return list of all recipes with no filtering, otherwise filter recipe table and return result
     try {
         let recipes: IRecipes[];
         if (filterQuery.length > 0) {
-            recipes = await FilterRecipes({filterQuery});
+            //  If limit supplied and greater than 0, return only limited number of filtered recipes, otherwise return all filtered recipes
+            let filterLimit = -1
+            if (req.query.limit && Number(String(req.query.limit)) > 0) {
+              filterLimit = Number(String(req.query.limit))
+            }
+            recipes = await FilterRecipes(filterQuery, filterLimit, skip);
         } else {
-            recipes = await GetRecipes();
+            // If limit supplied and greater than 0, return only limited number of non-filtered recipes, otherwise return all
+            if (req.query.limit && Number(String(req.query.limit)) > 0) {
+              let limit = Number(String(req.query.limit))
+              recipes = await GetRecipesLimit(limit, skip);
+            } else {
+              recipes = await GetRecipes(skip);
+            }
         }
         return res.json({ count: recipes.length, recipes: recipes });
     } catch (error: any) {

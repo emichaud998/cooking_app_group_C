@@ -32,8 +32,19 @@ export async function GetRecipesByName({
 }
 
 // Get all recipe information from DB
-export async function GetRecipes(): Promise<IRecipes[]> {
-  return Recipe.find({})
+export async function GetRecipes(skip:number): Promise<IRecipes[]> {
+  return Recipe.find({}).skip(skip)
+    .then((data: IRecipes[]) => {
+      return data;
+    })
+    .catch((error: Error) => {
+      throw error;
+    });
+}
+
+// Get limit number of recipe information from DB
+export async function GetRecipesLimit(limit: number, skip:number): Promise<IRecipes[]> {
+  return Recipe.find({}).limit(limit).skip(skip)
     .then((data: IRecipes[]) => {
       return data;
     })
@@ -128,13 +139,19 @@ export async function DeleteRecipeName({
 }
 
 // Filter recipes table with given filter query
-export async function FilterRecipes({
-  filterQuery,
-}: FilterQuery<IRecipes>): Promise<IRecipes[]> {
+export async function FilterRecipes(
+  filterQuery:  FilterQuery<IRecipes>, limit: number, skip: number
+): Promise<IRecipes[]> {
+  let recipeAggr = []
   
-  return Recipe.aggregate([
-    { $match: { $and: filterQuery} }
-  ])
+  recipeAggr.push({ $match: { $and: filterQuery} })
+  recipeAggr.push({ $skip: skip })
+
+  if (limit > 0) {
+    recipeAggr.push({ $limit: limit })
+  }
+
+  return Recipe.aggregate(recipeAggr)
   .then((data: IRecipes[]) => {
     return data;
   })

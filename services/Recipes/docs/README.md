@@ -4,13 +4,13 @@
 The Recipes Manager is a service that coordinates inserts, updates, deletes, and retrievals from the Recipes MongoDB collection. The Recipes microservice maintains the MongoDB Recipes collection and supports the following operations with 10 HTTP REST API endpoints:
 
 1. Create new recipe
-2. Get list of all recipe information from Recipes collection
+2. Get list of all recipe information from Recipes collection. Can limit this list or skip over entries.
 3. Get a single recipe's information from Recipes collection by Recipe ID 
 4. Gets a list of all the distinct ingredients in DB
 5. Gets information for one or many recipes whose name contains request name
 6. Update a recipe entry information associated with either an ID or exact name
 7. Delete a recipe entry associated with either an ID or exact name from Recipes collection
-8. Filter Recipes by one or more of the following:
+8. Filter Recipes by one or more of the following (can limit this filtered list or skip over entries):
     * Filter all recipes that includes at least one requested ingredient from list
     * Filter all recipes that only include requested ingredients from list
     * Filter all recipes that do not include any requested ingredients from list
@@ -165,12 +165,12 @@ const RecipeStepsSchema: Schema  = new Schema({
 ```
 ## Recipes HTTP REST API Endpoints
 
-### (GET) `/get_recipes`: return a list of all recipes:
+### (GET) `/get_recipes`: return a list of all recipes- can supply optional limit and skip number:
 
 Example request:
 
 ```
-http://localhost:8000/get_recipes
+http://localhost:8000/get_recipes?limit=3&skip=0
 ```
 
 Example response:
@@ -1056,12 +1056,12 @@ Example response:
 }
 ```
 
-### (POST) `/filter_recipes`: get filtered list of recipes filtered by one or more of the supported filters (or returns full recipe list if no filters provided)
+### (POST) `/filter_recipes`: get filtered list of recipes filtered by one or more of the supported filters (or returns full recipe list if no filters provided)- - can supply optional limit and skip number
 
 Example request:
 
 ```
-http://localhost:8000/filter_recipes
+http://localhost:8000/filter_recipes?limit=1&skip=0
 ```
 
 Example Request Body:
