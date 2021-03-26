@@ -1,6 +1,7 @@
 import { FilterQuery, CreateQuery, UpdateQuery, ObjectId } from "mongoose";
 import Recipe, { IRecipes } from "./models/recipes";
 
+// Get recipe information for one recipe by ID from DB
 export async function GetRecipeByID({
     id,
 }: FilterQuery<IRecipes>): Promise<IRecipes | null> {
@@ -15,6 +16,7 @@ export async function GetRecipeByID({
     });
 }
 
+// Get all recipe information from DB for recipes that contain the given name
 export async function GetRecipesByName({
   name,
 }: FilterQuery<IRecipes>): Promise<IRecipes[]> {
@@ -29,6 +31,7 @@ export async function GetRecipesByName({
   });
 }
 
+// Get all recipe information from DB
 export async function GetRecipes(): Promise<IRecipes[]> {
   return Recipe.find({})
     .then((data: IRecipes[]) => {
@@ -39,6 +42,7 @@ export async function GetRecipes(): Promise<IRecipes[]> {
     });
 }
 
+// Create new recipe entry in DB 
 export async function CreateRecipe(
   recipeObj: CreateQuery<IRecipes>): Promise<IRecipes> {
   return Recipe.create(recipeObj)
@@ -50,6 +54,7 @@ export async function CreateRecipe(
     });
 }
 
+// Update a recipe with given ID with new update information
 export async function UpdateRecipeID({
   id,
   updates,
@@ -67,6 +72,7 @@ export async function UpdateRecipeID({
     });
 }
 
+// Update a recipe with given exact name with new update information
 export async function UpdateRecipeName({
   name,
   updates,
@@ -84,6 +90,7 @@ export async function UpdateRecipeName({
     });
 }
 
+// Delete recipe entry with given ID from DB
 export async function DeleteRecipeID({
   id,
 }: FilterQuery<IRecipes>): Promise<IRecipes | null> {
@@ -96,6 +103,7 @@ export async function DeleteRecipeID({
     });
 }
 
+// Delete recipe entry with given name from DB
 export async function DeleteRecipeName({
   name,
 }: FilterQuery<IRecipes>): Promise<IRecipes | null> {
@@ -108,6 +116,7 @@ export async function DeleteRecipeName({
     });
 }
 
+// Filter recipes table with given filter query
 export async function FilterRecipes({
   filterQuery,
 }: FilterQuery<IRecipes>): Promise<IRecipes[]> {

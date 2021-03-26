@@ -1,6 +1,6 @@
-import { AnyCnameRecord } from "dns";
 import mongoose, { Schema, Document } from "mongoose";
 
+// Interface defining the structure of a recipe creation request
 export interface RecipeCreate {
 	name?: string, 
 	description?: string, 
@@ -17,6 +17,7 @@ export interface RecipeCreate {
 	recipe_steps?: string[]
 }
 
+// Interface defining the structure of the recipe dietary categories field
 interface Dietary_Categories {
     [index: string]: any;
     low_sodium?: boolean,
@@ -33,6 +34,7 @@ interface Dietary_Categories {
     healthy?: boolean,
 }
 
+// Interface defining the structure of the recipe meal type field
 interface Meal_Type {
     [index: string]: any;
     breakfast?: boolean,
@@ -44,6 +46,7 @@ interface Meal_Type {
     dessert?: boolean
 }
 
+// Interface defining the structure of a recipe filter request 
 export interface RecipeFilter {
     filter_category: Dietary_Categories,
     filter_meal_type: Meal_Type
@@ -52,12 +55,14 @@ export interface RecipeFilter {
 	filter_ingredient_exclude: string[]
 }
 
+// /Interface defining the structure of a recipe update request
 export interface RecipeUpdate{
     id?: String,
     name?: String
     updates: RecipeCreate
 }
 
+// Interface defining the structure of the recipe schema
 export interface IRecipes extends Document {
     name?: string,
     description: string,
@@ -76,6 +81,7 @@ export interface IRecipes extends Document {
     recipe_steps: [IRecipeSteps]
 }
 
+// Interface defining the structure of the recipe ingredients schema
 export interface IIngredients extends Document {
     ingredient_name: string,
     ingredient_measurement: {
@@ -85,11 +91,13 @@ export interface IIngredients extends Document {
     ingredient_type?: string
 }
 
+// Interface defining the structure of the recipe steps schema
 export interface IRecipeSteps extends Document {
     step_number: number,
     step_description: string,
 }
 
+// Recipe ingredients sub document schema
 const IngredientsSchema: Schema  = new Schema({
     ingredient_name: {type: String, required: true},
     ingredient_measurement: {
@@ -99,11 +107,13 @@ const IngredientsSchema: Schema  = new Schema({
     ingredient_type: {type: String},
 });
 
+// Recipe steps sub document schema
 const RecipeStepsSchema: Schema  = new Schema({
     step_number: {type: Number, required: true},
     step_description: {type: String}
 });
 
+// Recipes table schema
 const RecipesSchema: Schema = new Schema({
   name: { type: String, required: true, unique: true},
   description: {type: String},

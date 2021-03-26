@@ -7,6 +7,7 @@ const app = express();
 app.use(express.json());
 const PORT = 8000;
 
+// Connect to mongodb database
 const uri = `mongodb://localhost/Recipes`
 //const uri = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@localhost:27017/${process.env.MONGO_DATABASE}`;
 mongoose.connect(uri, {
@@ -15,14 +16,13 @@ mongoose.connect(uri, {
   useUnifiedTopology: true,
   useFindAndModify: false,
 });
-
 const db = mongoose.connection;
-
 db.on("error", console.error.bind(console, "[server] connection error:"));
 
 db.once("open", () => {
   console.log("[server] database connected!");
 
+  // Returns all recipes with all information from DB
   app.get("/get_recipes", async (req, res) => {
     try {
       const recipes = await GetRecipes();
@@ -33,6 +33,7 @@ db.once("open", () => {
     }
   });
 
+  // Returns one recipe specified by ID param with all its information 
   app.get("/get_recipe_by_id", async (req, res) => {
     if (!req.query.id) {
       res.status(400);
@@ -52,6 +53,7 @@ db.once("open", () => {
     }
   });
 
+  // Returns one recipe specified by name param with all its information 
   app.get("/get_recipe_by_name", async (req, res) => {
     if (!req.query.name) {
       res.status(400);
@@ -61,7 +63,7 @@ db.once("open", () => {
     try {
       const recipes = await GetRecipesByName({ name });
       if (recipes === null) {
-        return res.json({ message: "There are no recipes containing given name" });
+        return res.json({ message: "There are no recipes with given name" });
       } else {
         return res.json({ recipes: recipes });
       }
@@ -71,6 +73,7 @@ db.once("open", () => {
     }
   });
 
+  // Creates a new recipe entry in DB
   app.post("/create_recipe", async (req, res) => {
     if (!req.body.name) {
         res.status(400);
@@ -89,7 +92,7 @@ db.once("open", () => {
     } catch (error: any) {
       if (error.code === 11000) {
         res.status(409);
-        return res.json({ error: "User with given email already existed" });
+        return res.json({ error: "Recipe with given name already existed" });
       } else {
         res.status(500);
         return res.json({ error: "Internal server error" });
@@ -97,73 +100,27 @@ db.once("open", () => {
     }
   });
 
+  // Filters recipe list by categories, ingredients, and/or meal type
   app.post("/filter_recipes", async (req, res) => {
-    let categoryQuery= {}
-    let mealTypeQuery= {}
-    let ingredientIncludeQuery={}
-    let ingredientExcludeQuery={}
-    let filterQuery = [];
+    let filterQuery = createFilterQuery(req.body);
 
-    if (req.body.filter_category && JSON.stringify(req.body.filter_category.length) !== `{}`) {
-        let categoryObjects = req.body.filter_category
-        let categoryQueryArr = [];
-        for (let key in categoryObjects) {
-            let value = categoryObjects[key];
-            key = "dietary_categories."+key;
-            let categoryObj = {[key]: value};
-            categoryQueryArr.push(categoryObj);
-        }
-        categoryQuery = { $and: categoryQueryArr}
-        filterQuery.push(categoryQuery);
-    }
-
-    if (req.body.meal_type && JSON.stringify(req.body.meal_type.length) !== `{}`) {
-        let mealTypeObjects = req.body.meal_type
-        let mealTypeQueryArr = [];
-        for (let key in mealTypeObjects) {
-            let value = mealTypeObjects[key];
-            key = "meal_type."+key;
-            let mealTypeObj = {[key]: value};
-            mealTypeQueryArr.push(mealTypeObj);
-        }
-        mealTypeQuery = { $and: mealTypeQueryArr}
-        filterQuery.push(mealTypeQuery);
-    }
-
-    if (req.body.filter_ingredient_contains && req.body.filter_ingredient_contains.length > 0) {
-        ingredientIncludeQuery = { "ingredients.ingredient_name": { $in:  req.body.filter_ingredient_contains} }
-        filterQuery.push(ingredientIncludeQuery);
-    }else if (req.body.filter_ingredient_only && req.body.filter_ingredient_only.length > 0) {
-        ingredientIncludeQuery = { "ingredients.ingredient_name": { $all:  req.body.filter_ingredient_only} }
-        filterQuery.push(ingredientIncludeQuery);
-    }
-
-    if (req.body.filter_ingredient_exclude && req.body.filter_ingredient_exclude.length > 0) {
-        ingredientExcludeQuery = req.body.filter_ingredient_exclude;
-        filterQuery.push(ingredientExcludeQuery);
-    }
-
-    if (filterQuery.length < 0) {
-        res.status(409);
-        return res.json({ error: "Must pass in filter parameters" });
-    }
-
+    // If no filtering parameters supplied, return list of all recipes with no filtering, otherwise filter recipe table and return result
     try {
-      const recipes = await FilterRecipes({filterQuery});
-      return res.json({ count: recipes.length, recipes: recipes });
+        let recipes: IRecipes[];
+        if (filterQuery.length > 0) {
+            recipes = await FilterRecipes({filterQuery});
+        } else {
+            recipes = await FilterRecipes({filterQuery});
+        }
+        return res.json({ count: recipes.length, recipes: recipes });
     } catch (error: any) {
-      if (error.code === 11000) {
-        res.status(409);
-        return res.json({ error: "User with given email already existed" });
-      } else {
         res.status(500);
         console.log(error)
         return res.json({ error: "Internal server error" });
-      }
     }
   });
 
-
+  // Update recipe associated with id param with update param information
   app.put("/update_recipe_by_id", async (req, res) => {
     if (!req.body.id) {
       res.status(400);
@@ -190,6 +147,7 @@ db.once("open", () => {
     }
   })
 
+  // Update recipe associated with name param with update param information
   app.put("/update_recipe_by_name", async (req, res) => {
     if (!req.body.name) {
       res.status(400);
@@ -216,6 +174,7 @@ db.once("open", () => {
     }
   })
 
+  // Delete recipe associated with id param from DB
   app.delete("/delete_recipe_by_id", async (req, res) => {
     if (!req.query.id) {
       res.status(400);
@@ -235,6 +194,7 @@ db.once("open", () => {
     }
   });
 
+// Delete recipe associated with name param from DB
 app.delete("/delete_recipe_by_name", async (req, res) => {
     if (!req.query.name) {
       res.status(400);
@@ -253,12 +213,14 @@ app.delete("/delete_recipe_by_name", async (req, res) => {
       return res.json({ error: "Internal server error" });
     }
   });
+
+  
   app.listen(PORT, () => {
     console.log(`️[server]: Server is running at http://localhost:${PORT}`);
   });
 });
 
-
+// Format recipe information from request into format for recipe table schema
 function formatRecipe(recipeObj: RecipeCreate) {
     let recipe = {} as IRecipes;
     const name = String(recipeObj.name);
@@ -279,7 +241,7 @@ function formatRecipe(recipeObj: RecipeCreate) {
     if (recipeObj.calories) {
         recipe.calories = Number(String(recipeObj.calories));
     }
-    formatYieldAmount(recipe, recipeObj);
+    formatYield(recipe, recipeObj);
 
     formatMealType(recipe, recipeObj);
     formatDietaryCategories(recipe, recipeObj);
@@ -295,7 +257,10 @@ function formatRecipe(recipeObj: RecipeCreate) {
     return recipe;
 } 
 
-function formatYieldAmount(recipe: IRecipes, recipeObj: RecipeCreate) {
+// Format yield nested field of recipe object using request information
+function formatYield(recipe: IRecipes, recipeObj: RecipeCreate) {
+
+    // Only add yield information to recipe object if both the amount and unit are supplied
     if (recipeObj.yield_amount && recipeObj.yield_unit) {
         let yield_amount = Number(String(recipeObj.yield_amount));
         let yield_unit = String(recipeObj.yield_unit);
@@ -303,8 +268,12 @@ function formatYieldAmount(recipe: IRecipes, recipeObj: RecipeCreate) {
     }
 }
 
+// Format meal type nested field of recipe object using request information
 function formatMealType(recipe: IRecipes, recipeObj: RecipeCreate) {
+    // Defaultly set all meal types equal to false
     recipe.meal_type = {breakfast: false, lunch: false, dinner: false, appetizer: false, side_dish: false, snack: false, dessert: false};
+    
+    // For all meal types passed in, set the meal type in the recipe object to true
     if (recipeObj.meal_type) {
         const mealArray = recipeObj.meal_type;
         for (let mealType of mealArray) {
@@ -313,7 +282,9 @@ function formatMealType(recipe: IRecipes, recipeObj: RecipeCreate) {
     } 
 }
 
+// Format dietary categories nested field of recipe object using request information
 function formatDietaryCategories(recipe: IRecipes, recipeObj: RecipeCreate){
+    // Defaultly set all dietary categories equal to false
     recipe.dietary_categories = {
         low_sodium: false, 
         low_fat: false, 
@@ -328,6 +299,7 @@ function formatDietaryCategories(recipe: IRecipes, recipeObj: RecipeCreate){
         vegan: false, 
         healthy: false
     }
+    // For all dietary categories passed in, set the dietary category in the recipe object to true
     if (recipeObj.dietary_categories) {
         const dietaryCategories = recipeObj.dietary_categories;
 
@@ -337,20 +309,25 @@ function formatDietaryCategories(recipe: IRecipes, recipeObj: RecipeCreate){
     }
 }
 
+// Format ingredient list nested field of recipe object using request information
 function formatIngredientList(recipe: IRecipes, recipeObj: RecipeCreate){
     if (recipeObj.ingredients_list) {
         let ingredients = recipeObj.ingredients_list;
         let ingredientList: IIngredients[] = [];
         for (let ingredient of ingredients ){
             let ingredientObj = {} as IIngredients;
+
+            // Do not add ingredient if it is not supplied a name, otherwise add ingredient name to ingredient object
             if (!ingredient.ingredient_name) {
                 continue;
             } else {
                 ingredientObj.ingredient_name = ingredient.ingredient_name;
             }
+            // Only add a measurement amount if a measurment unit is also supplied to ingredient object
             if (ingredient.measurement_amount && ingredient.measurement_unit) {
                 ingredientObj.ingredient_measurement = {measurement_amount: ingredient.measurement_amount, measurement_unit: ingredient.measurement_unit} 
             }
+            // Add ingredient type to ingredient object
             if (ingredient.ingredient_type) {
                 ingredientObj.ingredient_type = ingredient.ingredient_type
             }
@@ -362,18 +339,76 @@ function formatIngredientList(recipe: IRecipes, recipeObj: RecipeCreate){
     }
 }
 
+// Format recipe steps nested field of recipe object using request information
 function formatRecipeSteps(recipe: IRecipes, recipeObj: RecipeCreate) {
     if (recipeObj.recipe_steps) {
         let recipe_steps = recipeObj.recipe_steps;
         let recipeSteps: IRecipeSteps[] = [];
+
         for (let i = 1; i <= recipe_steps.length; i++) {
             let recipeStep = {} as IRecipeSteps;
             recipeStep.step_number = i;
             recipeStep.step_description = recipe_steps[i-1];
             recipeSteps.push(recipeStep)
         }
+
         if (recipeSteps.length > 0) {
             recipe.recipe_steps =  recipeSteps as [IRecipeSteps];
         }
     }
+}
+
+// Create mongoDB filtering query using the filtering params in request to filter recipe table
+function createFilterQuery(filterObj: RecipeFilter) {
+    let categoryQuery= {}
+    let mealTypeQuery= {}
+    let ingredientIncludeQuery={}
+    let ingredientExcludeQuery={}
+    let filterQuery = [];
+
+    // Create category filter array if category filtering object supplied in request
+    if (filterObj.filter_category && JSON.stringify(filterObj.filter_category.length) !== `{}`) {
+        let categoryObjects = filterObj.filter_category
+        let categoryQueryArr = [];
+        for (let key in categoryObjects) {
+            let value = categoryObjects[key];
+            key = "dietary_categories."+key;
+            let categoryObj = {[key]: value};
+            categoryQueryArr.push(categoryObj);
+        }
+        categoryQuery = { $and: categoryQueryArr}
+        filterQuery.push(categoryQuery);
+    }
+
+    // Create meal type filter array if category filtering object supplied in request
+    if (filterObj.filter_meal_type && JSON.stringify(filterObj.filter_meal_type.length) !== `{}`) {
+        let mealTypeObjects = filterObj.filter_meal_type
+        let mealTypeQueryArr = [];
+        for (let key in mealTypeObjects) {
+            let value = mealTypeObjects[key];
+            key = "meal_type."+key;
+            let mealTypeObj = {[key]: value};
+            mealTypeQueryArr.push(mealTypeObj);
+        }
+        mealTypeQuery = { $and: mealTypeQueryArr}
+        filterQuery.push(mealTypeQuery);
+    }
+
+    // Create ingredient filter list that either checks if a recipe's ingredient list contains at least one of the filtering ingredients, 
+    // or if a recipe's ingredient list contains all of the filtering ingredients
+    if (filterObj.filter_ingredient_contains && filterObj.filter_ingredient_contains.length > 0) {
+        ingredientIncludeQuery = { "ingredients.ingredient_name": { $in:  filterObj.filter_ingredient_contains} }
+        filterQuery.push(ingredientIncludeQuery);
+    }else if (filterObj.filter_ingredient_only && filterObj.filter_ingredient_only.length > 0) {
+        ingredientIncludeQuery = { "ingredients.ingredient_name": { $all:  filterObj.filter_ingredient_only} }
+        filterQuery.push(ingredientIncludeQuery);
+    }
+
+    // Create ingredient filter list that checks if a recipe's ingredient list does not contain any of the filtering ingredients
+    if (filterObj.filter_ingredient_exclude && filterObj.filter_ingredient_exclude.length > 0) {
+        ingredientExcludeQuery = { "ingredients.ingredient_name": { $nin:  filterObj.filter_ingredient_exclude} };
+        filterQuery.push(ingredientExcludeQuery);
+    }
+
+    return filterQuery;
 }
