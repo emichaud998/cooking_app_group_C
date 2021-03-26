@@ -1,4 +1,5 @@
 import { FilterQuery, CreateQuery, UpdateQuery, ObjectId } from "mongoose";
+import { emit } from "node:process";
 import Recipe, { IRecipes } from "./models/recipesModels";
 
 // Get recipe information for one recipe by ID from DB
@@ -120,9 +121,10 @@ export async function DeleteRecipeName({
 export async function FilterRecipes({
   filterQuery,
 }: FilterQuery<IRecipes>): Promise<IRecipes[]> {
-  return Recipe.find(
-    { $and: filterQuery}
-  )
+  
+  return Recipe.aggregate([
+    { $match: { $and: filterQuery} }
+  ])
   .then((data: IRecipes[]) => {
     return data;
   })

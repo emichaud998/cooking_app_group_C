@@ -110,7 +110,7 @@ db.once("open", () => {
         if (filterQuery.length > 0) {
             recipes = await FilterRecipes({filterQuery});
         } else {
-            recipes = await FilterRecipes({filterQuery});
+            recipes = await GetRecipes();
         }
         return res.json({ count: recipes.length, recipes: recipes });
     } catch (error: any) {
