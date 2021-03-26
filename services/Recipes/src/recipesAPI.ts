@@ -440,7 +440,8 @@ function createFilterQuery(filterObj: RecipeFilter) {
         ingredientIncludeQuery = { "ingredients.ingredient_name": { $in:  filterObj.filter_ingredient_contains} }
         filterQuery.push(ingredientIncludeQuery);
     }else if (filterObj.filter_ingredient_only && filterObj.filter_ingredient_only.length > 0) {
-        ingredientIncludeQuery = { "ingredients.ingredient_name": { $all:  filterObj.filter_ingredient_only} }
+        ingredientIncludeQuery =  {$expr:{$setIsSubset:["$ingredients.ingredient_name",filterObj.filter_ingredient_only]}},{_id:0};
+
         filterQuery.push(ingredientIncludeQuery);
     }
 
