@@ -90,25 +90,6 @@ export async function UpdateRecipeName({
     });
 }
 
-// Update a recipe with given exact name with new update information
-export async function UpdateRecipeIngredient({
-  id, 
-  setter, 
-  filters
-}: UpdateQuery<IRecipes>): Promise<IRecipes | null> {
-  return Recipe.findOneAndUpdate(
-    { _id: id },
-    setter,
-    { arrayFilters: filters, new: true }
-  )
-    .then((data: IRecipes | null) => {
-      return data;
-    })
-    .catch((error: Error) => {
-      throw error;
-    });
-}
-
 // Delete recipe entry with given ID from DB
 export async function DeleteRecipeID({
   id,
