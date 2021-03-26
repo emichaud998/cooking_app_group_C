@@ -13,9 +13,18 @@ export interface RecipeCreate {
 	meal_type?: string[], 
 	dietary_categories?: string[], 
 	dish_type?: string, 
-	ingredients?: [{ingredient_name: string, measurement_amount: number, measurement_unit: string, ingredient_type: string}],
+	ingredients?: IngredientCreate[],
 	recipe_steps?: string[]
 }
+
+// Interface for ingredient recipe create list
+export interface IngredientCreate {
+    ingredient_name: string, 
+    measurement_amount: number, 
+    measurement_unit: string, 
+    ingredient_type: string
+}
+
 
 // Interface defining the structure of the recipe dietary categories field
 interface Dietary_Categories {

@@ -42,6 +42,17 @@ export async function GetRecipes(): Promise<IRecipes[]> {
     });
 }
 
+// Get all ingredients names from DB
+export async function GetIngredients(): Promise<string[]> {
+  return Recipe.distinct('ingredients.ingredient_name')
+    .then((data: string[]) => {
+      return data;
+    })
+    .catch((error: Error) => {
+      throw error;
+    });
+}
+
 // Create new recipe entry in DB 
 export async function CreateRecipe(
   recipeObj: CreateQuery<IRecipes>): Promise<IRecipes> {

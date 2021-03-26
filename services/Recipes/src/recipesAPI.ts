@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesByName, FilterRecipes, UpdateRecipeID, UpdateRecipeName } from "./crudOperations";
+import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesByName, FilterRecipes, UpdateRecipeID, UpdateRecipeName, GetIngredients } from "./crudOperations";
 import { IRecipes, IIngredients, IRecipeSteps, RecipeCreate, RecipeFilter } from "./models/recipesModels";
 
 const app = express();
@@ -27,6 +27,17 @@ db.once("open", () => {
     try {
       const recipes = await GetRecipes();
       res.json({ count: recipes.length, recipes: recipes });
+    } catch (error: any) {
+      res.status(500);
+      res.json({ error: "Internal server error" });
+    }
+  });
+
+  // Returns all distinct ingredient names from DB
+  app.get("/get_ingredients_list", async (req, res) => {
+    try {
+      const ingredients = await GetIngredients();
+      res.json({ count: ingredients.length, ingredients: ingredients });
     } catch (error: any) {
       res.status(500);
       res.json({ error: "Internal server error" });

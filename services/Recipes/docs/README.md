@@ -1,15 +1,16 @@
 # Recipes Manager Microservice
 
 ## Overview
-The Recipes Manager is a service that coordinates inserts, updates, deletes, and retrievals from the Recipes MongoDB collection. The Recipes microservice maintains the MongoDB Recipes collection and supports the following operations with 9 HTTP REST API endpoints:
+The Recipes Manager is a service that coordinates inserts, updates, deletes, and retrievals from the Recipes MongoDB collection. The Recipes microservice maintains the MongoDB Recipes collection and supports the following operations with 10 HTTP REST API endpoints:
 
 1. Create new recipe
 2. Get list of all recipe information from Recipes collection
 3. Get a single recipe's information from Recipes collection by Recipe ID 
-4. Gets information for one or many recipes whose name contains request name
-5. Update a recipe entry information associated with either an ID or exact name
-6. Delete a recipe entry associated with either an ID or exact name from Recipes collection
-7. Filter Recipes by one or more of the following:
+4. Gets a list of all the distinct ingredients in DB
+5. Gets information for one or many recipes whose name contains request name
+6. Update a recipe entry information associated with either an ID or exact name
+7. Delete a recipe entry associated with either an ID or exact name from Recipes collection
+8. Filter Recipes by one or more of the following:
     * Filter all recipes that includes at least one requested ingredient from list
     * Filter all recipes that only include requested ingredients from list
     * Filter all recipes that do not include any requested ingredients from list
@@ -35,7 +36,7 @@ The Recipes Manager includes many files with distinct purposes.
 
 ### Recipes API
 
-Runs the express server for the Recipes microservice REST API. The Recipes API provides many endpoints that respond to each of the HTTP request methods (GET/POST/PUT/DELETE) in order to perform many CRUD operation requests. The Recipes API supports 9 HTTP REST API endpoints explained below under the Recipes HTTP REST API Endpoints header.
+Runs the express server for the Recipes microservice REST API. The Recipes API provides many endpoints that respond to each of the HTTP request methods (GET/POST/PUT/DELETE) in order to perform many CRUD operation requests. The Recipes API supports 10 HTTP REST API endpoints explained below under the Recipes HTTP REST API Endpoints header.
 
 ### CRUD Operations
 
@@ -558,6 +559,43 @@ Example response:
     ]
 }
 ```
+
+### (GET) `/get_ingredients_list`: get list of all distinct ingredients
+
+Example request:
+
+```
+http://localhost:8000/get_ingredients_list
+```
+
+Example response:
+```json
+{
+    "count": 19,
+    "ingredients": [
+        "almonds",
+        "baking powder",
+        "banana",
+        "blueberries",
+        "bread crumbs",
+        "butter",
+        "cashew butter",
+        "cheddar cheese",
+        "eggs",
+        "elbow macaroni",
+        "flour",
+        "milk",
+        "paprika",
+        "parmesan cheese",
+        "salt",
+        "shredded coconut",
+        "sugar",
+        "vanilla extract",
+        "water"
+    ]
+}
+```
+
 
 ### (GET) `/get_recipe_by_id`: get recipe by id
 
