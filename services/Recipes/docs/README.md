@@ -30,6 +30,9 @@ As of right now the Recipe microservice connects to MongoDB locally, but this wi
 2. run `npm install`
 3. run `npm start` to start the APIs server
 
+### Recipes Collection Mock Data Population
+To populate a mock Recipes MongoDB collection with fake data, run `npm run populateMockDB`. This program will prompt the user to input the number of fake recipes they want to insert into the DB, and then it will create that many fake mock recipes and send each one to the Recipes Microservice's `/create_recipe` endpoint.
+
 ## Files
 
 The Recipes Manager includes many files with distinct purposes.
