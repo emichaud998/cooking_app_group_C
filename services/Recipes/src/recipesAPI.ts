@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesByName, FilterRecipes, UpdateRecipeID, UpdateRecipeName } from "./crud";
-import { IRecipes, IIngredients, IRecipeSteps, RecipeCreate, RecipeFilter, RecipeUpdate } from "./models/recipes";
+import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesByName, FilterRecipes, UpdateRecipeID, UpdateRecipeName } from "./crudOperations";
+import { IRecipes, IIngredients, IRecipeSteps, RecipeCreate, RecipeFilter } from "./models/recipesModels";
 
 const app = express();
 app.use(express.json());
@@ -54,7 +54,7 @@ db.once("open", () => {
   });
 
   // Returns one recipe specified by name param with all its information 
-  app.get("/get_recipe_by_name", async (req, res) => {
+  app.get("/get_recipes_by_name", async (req, res) => {
     if (!req.query.name) {
       res.status(400);
       return res.json({ error: "Missing 'name' field" });
@@ -79,7 +79,7 @@ db.once("open", () => {
         res.status(400);
         return res.json({ error: "Missing 'name' field" });
     }
-    if (!req.body.ingredients_list || req.body.ingredients_list.length <= 0) {
+    if (!req.body.ingredients || req.body.ingredients.length <= 0) {
         res.status(400);
         return res.json({ error: "Missing 'ingredients' field or did not supply any ingredients" });
     }
@@ -103,6 +103,7 @@ db.once("open", () => {
   // Filters recipe list by categories, ingredients, and/or meal type
   app.post("/filter_recipes", async (req, res) => {
     let filterQuery = createFilterQuery(req.body);
+    console.log(filterQuery[0]);
 
     // If no filtering parameters supplied, return list of all recipes with no filtering, otherwise filter recipe table and return result
     try {
@@ -135,9 +136,9 @@ db.once("open", () => {
     const updates = formatRecipe(req.body.updates);
     const id = String(req.body.id);
     try {
-      const recipe = await UpdateRecipeID({ id,  updates});
+      let recipe = await UpdateRecipeID({ id,  updates});
       if (recipe === null) {
-        return res.json({ message: "There is no recipe with given id" });
+        return res.json({ message: "There is no recipe with given id or no update information supplied" });
       } else {
         return res.json({ message: "Recipe information updated", recipe: recipe });
       }
@@ -164,7 +165,7 @@ db.once("open", () => {
     try {
       const recipe = await UpdateRecipeName({ name,  updates});
       if (recipe === null) {
-        return res.json({ message: "There is no recipe with given name" });
+        return res.json({ message: "There is no recipe with given name or no update information supplied" });
       } else {
         return res.json({ message: "Recipe information updated", recipe: recipe });
       }
@@ -223,8 +224,10 @@ app.delete("/delete_recipe_by_name", async (req, res) => {
 // Format recipe information from request into format for recipe table schema
 function formatRecipe(recipeObj: RecipeCreate) {
     let recipe = {} as IRecipes;
-    const name = String(recipeObj.name);
-    recipe.name = name;
+
+    if (recipeObj.name) {
+      recipe.name = String(recipeObj.name);
+    }
     
     if (recipeObj.description) {
         recipe.description = String(recipeObj.description);
@@ -311,8 +314,8 @@ function formatDietaryCategories(recipe: IRecipes, recipeObj: RecipeCreate){
 
 // Format ingredient list nested field of recipe object using request information
 function formatIngredientList(recipe: IRecipes, recipeObj: RecipeCreate){
-    if (recipeObj.ingredients_list) {
-        let ingredients = recipeObj.ingredients_list;
+    if (recipeObj.ingredients) {
+        let ingredients = recipeObj.ingredients;
         let ingredientList: IIngredients[] = [];
         for (let ingredient of ingredients ){
             let ingredientObj = {} as IIngredients;
@@ -367,13 +370,12 @@ function createFilterQuery(filterObj: RecipeFilter) {
     let filterQuery = [];
 
     // Create category filter array if category filtering object supplied in request
-    if (filterObj.filter_category && JSON.stringify(filterObj.filter_category.length) !== `{}`) {
+    if (filterObj.filter_category && filterObj.filter_category.length > 0) {
         let categoryObjects = filterObj.filter_category
         let categoryQueryArr = [];
-        for (let key in categoryObjects) {
-            let value = categoryObjects[key];
-            key = "dietary_categories."+key;
-            let categoryObj = {[key]: value};
+        for (let category of categoryObjects) {
+            let key = "dietary_categories."+category;
+            let categoryObj = {[key]: true};
             categoryQueryArr.push(categoryObj);
         }
         categoryQuery = { $and: categoryQueryArr}
@@ -381,13 +383,12 @@ function createFilterQuery(filterObj: RecipeFilter) {
     }
 
     // Create meal type filter array if category filtering object supplied in request
-    if (filterObj.filter_meal_type && JSON.stringify(filterObj.filter_meal_type.length) !== `{}`) {
+    if (filterObj.filter_meal_type && filterObj.filter_meal_type.length > 0) {
         let mealTypeObjects = filterObj.filter_meal_type
         let mealTypeQueryArr = [];
-        for (let key in mealTypeObjects) {
-            let value = mealTypeObjects[key];
-            key = "meal_type."+key;
-            let mealTypeObj = {[key]: value};
+        for (let meal_type of mealTypeObjects) {
+            let key = "meal_type."+meal_type;
+            let mealTypeObj = {[key]: true};
             mealTypeQueryArr.push(mealTypeObj);
         }
         mealTypeQuery = { $and: mealTypeQueryArr}

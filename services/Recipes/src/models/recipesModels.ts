@@ -13,7 +13,7 @@ export interface RecipeCreate {
 	meal_type?: string[], 
 	dietary_categories?: string[], 
 	dish_type?: string, 
-	ingredients_list?: [{ingredient_name: string, measurement_amount: number, measurement_unit: string, ingredient_type: string}]
+	ingredients?: [{ingredient_name: string, measurement_amount: number, measurement_unit: string, ingredient_type: string}],
 	recipe_steps?: string[]
 }
 
@@ -48,8 +48,8 @@ interface Meal_Type {
 
 // Interface defining the structure of a recipe filter request 
 export interface RecipeFilter {
-    filter_category: Dietary_Categories,
-    filter_meal_type: Meal_Type
+    filter_category: string[],
+    filter_meal_type: string[],
 	filter_ingredient_contains: string[],
 	filter_ingredient_only: string[],
 	filter_ingredient_exclude: string[]
@@ -118,7 +118,7 @@ const RecipesSchema: Schema = new Schema({
   name: { type: String, required: true, unique: true},
   description: {type: String},
   prep_time: {type: Number}, // prep time in minutes
-  cook_time: {type: Number}, // prep time in minutes
+  cook_time: {type: Number}, // cook time in minutes
   servings: {type: Number},
   calories: {type: Number},
   yield: {

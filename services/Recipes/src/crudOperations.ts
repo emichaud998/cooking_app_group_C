@@ -1,5 +1,5 @@
 import { FilterQuery, CreateQuery, UpdateQuery, ObjectId } from "mongoose";
-import Recipe, { IRecipes } from "./models/recipes";
+import Recipe, { IRecipes } from "./models/recipesModels";
 
 // Get recipe information for one recipe by ID from DB
 export async function GetRecipeByID({
@@ -81,6 +81,25 @@ export async function UpdateRecipeName({
     { name: name },
     updates,
     { new: true }
+  )
+    .then((data: IRecipes | null) => {
+      return data;
+    })
+    .catch((error: Error) => {
+      throw error;
+    });
+}
+
+// Update a recipe with given exact name with new update information
+export async function UpdateRecipeIngredient({
+  id, 
+  setter, 
+  filters
+}: UpdateQuery<IRecipes>): Promise<IRecipes | null> {
+  return Recipe.findOneAndUpdate(
+    { _id: id },
+    setter,
+    { arrayFilters: filters, new: true }
   )
     .then((data: IRecipes | null) => {
       return data;
