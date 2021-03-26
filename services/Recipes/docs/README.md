@@ -859,7 +859,7 @@ Example response:
 Example request:
 
 ```
-http://localhost:8000/update_user_by_email/?email=cunbidun@gmail.com&userName=duy
+http://localhost:8000/create_recipe
 ```
 
 Example Request Body:
