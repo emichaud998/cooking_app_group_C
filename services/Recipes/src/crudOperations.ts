@@ -120,7 +120,6 @@ export async function DeleteRecipeName({
 export async function FilterRecipes({
   filterQuery,
 }: FilterQuery<IRecipes>): Promise<IRecipes[]> {
-  console.log(filterQuery)
   return Recipe.find(
     { $and: filterQuery}
   )

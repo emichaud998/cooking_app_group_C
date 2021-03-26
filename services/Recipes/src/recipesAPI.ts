@@ -103,7 +103,6 @@ db.once("open", () => {
   // Filters recipe list by categories, ingredients, and/or meal type
   app.post("/filter_recipes", async (req, res) => {
     let filterQuery = createFilterQuery(req.body);
-    console.log(filterQuery[0]);
 
     // If no filtering parameters supplied, return list of all recipes with no filtering, otherwise filter recipe table and return result
     try {
@@ -116,7 +115,6 @@ db.once("open", () => {
         return res.json({ count: recipes.length, recipes: recipes });
     } catch (error: any) {
         res.status(500);
-        console.log(error)
         return res.json({ error: "Internal server error" });
     }
   });
