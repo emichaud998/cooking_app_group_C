@@ -49,14 +49,14 @@ export async function CreateRecipe(
       throw error;
     });
 }
-/*
-export async function UpdateRecipe({
+
+export async function UpdateRecipeID({
   id,
-  userName,
+  updates,
 }: UpdateQuery<IRecipes>): Promise<IRecipes | null> {
   return Recipe.findOneAndUpdate(
-    { email: email },
-    { userName: userName },
+    { _id: id },
+    updates,
     { new: true }
   )
     .then((data: IRecipes | null) => {
@@ -65,7 +65,24 @@ export async function UpdateRecipe({
     .catch((error: Error) => {
       throw error;
     });
-}*/
+}
+
+export async function UpdateRecipeName({
+  name,
+  updates,
+}: UpdateQuery<IRecipes>): Promise<IRecipes | null> {
+  return Recipe.findOneAndUpdate(
+    { name: name },
+    updates,
+    { new: true }
+  )
+    .then((data: IRecipes | null) => {
+      return data;
+    })
+    .catch((error: Error) => {
+      throw error;
+    });
+}
 
 export async function DeleteRecipeID({
   id,

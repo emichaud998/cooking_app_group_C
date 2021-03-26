@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesByName, FilterRecipes } from "./crud";
-//import { IRecipes, IIngredients, IRecipeSteps } from "./models/recipes";
+import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesByName, FilterRecipes, UpdateRecipeID, UpdateRecipeName } from "./crud";
+import { IRecipes, IIngredients, IRecipeSteps, RecipeCreate, RecipeFilter, RecipeUpdate } from "./models/recipes";
 
 const app = express();
 app.use(express.json());
@@ -72,21 +72,19 @@ db.once("open", () => {
   });
 
   app.post("/create_recipe", async (req, res) => {
-    if (!req.body.recipe) {
-      res.status(400);
-      return res.json({ error: "Missing 'recipe' field" });
-    }
-    if (!req.body.recipe.name) {
+    if (!req.body.name) {
         res.status(400);
         return res.json({ error: "Missing 'name' field" });
     }
-    if (!req.body.recipe.ingredients) {
+    if (!req.body.ingredients_list || req.body.ingredients_list.length <= 0) {
         res.status(400);
-        return res.json({ error: "Missing 'ingredients' field" });
+        return res.json({ error: "Missing 'ingredients' field or did not supply any ingredients" });
     }
 
+    let newRecipe = formatRecipe(req.body);
+
     try {
-      const recipe = await CreateRecipe(req.body.recipe);
+      const recipe = await CreateRecipe(newRecipe);
       return res.json({ message: "Recipe created", recipe: recipe });
     } catch (error: any) {
       if (error.code === 11000) {
@@ -165,30 +163,58 @@ db.once("open", () => {
     }
   });
 
-  /*
-  app.put("/update_user_by_email", async (req, res) => {
-    if (!req.query.email) {
+
+  app.put("/update_recipe_by_id", async (req, res) => {
+    if (!req.body.id) {
       res.status(400);
-      return res.json({ error: "Missing 'email' field" });
+      return res.json({ error: "Missing 'id' field" });
     }
-    if (!req.query.userName) {
-      res.status(400);
-      return res.json({ error: "Missing 'userName' field" });
+
+    if (!req.body.updates) {
+        res.status(400);
+        return res.json({ error: "Missing 'updates' field" });
     }
-    const email = String(req.query.email);
-    const userName = String(req.query.userName);
+
+    const updates = formatRecipe(req.body.updates);
+    const id = String(req.body.id);
     try {
-      const user = await UpdateUser({ email, userName });
-      if (user === null) {
-        return res.json({ message: "There is no user with given email" });
+      const recipe = await UpdateRecipeID({ id,  updates});
+      if (recipe === null) {
+        return res.json({ message: "There is no recipe with given id" });
       } else {
-        return res.json({ message: "User information updated", users: user });
+        return res.json({ message: "Recipe information updated", recipe: recipe });
       }
     } catch (error: any) {
       res.status(500);
       return res.json({ error: "Internal server error" });
     }
-  });*/
+  })
+
+  app.put("/update_recipe_by_name", async (req, res) => {
+    if (!req.body.name) {
+      res.status(400);
+      return res.json({ error: "Missing 'name' field" });
+    }
+
+    if (!req.body.updates) {
+        res.status(400);
+        return res.json({ error: "Missing 'updates' field" });
+    }
+
+    const updates = formatRecipe(req.body.updates);
+    const name = String(req.body.name);
+    try {
+      const recipe = await UpdateRecipeName({ name,  updates});
+      if (recipe === null) {
+        return res.json({ message: "There is no recipe with given name" });
+      } else {
+        return res.json({ message: "Recipe information updated", recipe: recipe });
+      }
+    } catch (error: any) {
+      res.status(500);
+      return res.json({ error: "Internal server error" });
+    }
+  })
 
   app.delete("/delete_recipe_by_id", async (req, res) => {
     if (!req.query.id) {
@@ -233,54 +259,61 @@ app.delete("/delete_recipe_by_name", async (req, res) => {
 });
 
 
-/*function formatRecipe(req: express.Request) {
+function formatRecipe(recipeObj: RecipeCreate) {
     let recipe = {} as IRecipes;
-    const name = String(req.body.name);
+    const name = String(recipeObj.name);
     recipe.name = name;
     
-    if (req.body.description) {
-        recipe.description = String(req.body.description);
+    if (recipeObj.description) {
+        recipe.description = String(recipeObj.description);
     }
-    if (req.body.prep_time) {
-        recipe.prep_time = Number(String(req.body.prep_time));
+    if (recipeObj.prep_time) {
+        recipe.prep_time = Number(String(recipeObj.prep_time));
     } 
-    if (req.body.cook_time) {
-        recipe.cook_time = Number(String(req.body.cook_time));
+    if (recipeObj.cook_time) {
+        recipe.cook_time = Number(String(recipeObj.cook_time));
     }
-    if (req.body.servings) {
-        recipe.servings = Number(String(req.body.servings));
+    if (recipeObj.servings) {
+        recipe.servings = Number(String(recipeObj.servings));
     }
-    if (req.body.calories) {
-        recipe.calories = Number(String(req.body.calories));
+    if (recipeObj.calories) {
+        recipe.calories = Number(String(recipeObj.calories));
     }
-    if (req.body.yield_amount && req.body.yield_unit) {
-        let yield_amount = Number(String(req.body.yield_amount));
-        let yield_unit = String(req.body.yield_unit);
+    formatYieldAmount(recipe, recipeObj);
+
+    formatMealType(recipe, recipeObj);
+    formatDietaryCategories(recipe, recipeObj);
+
+    if (recipeObj.dish_type) {
+        recipe.dish_type = String(recipeObj.dish_type);
+    }
+
+    formatIngredientList(recipe, recipeObj);
+
+    formatRecipeSteps(recipe, recipeObj);
+
+    return recipe;
+} 
+
+function formatYieldAmount(recipe: IRecipes, recipeObj: RecipeCreate) {
+    if (recipeObj.yield_amount && recipeObj.yield_unit) {
+        let yield_amount = Number(String(recipeObj.yield_amount));
+        let yield_unit = String(recipeObj.yield_unit);
         recipe.yield = {yield_amount: yield_amount, yield_unit: yield_unit};
     }
+}
 
+function formatMealType(recipe: IRecipes, recipeObj: RecipeCreate) {
     recipe.meal_type = {breakfast: false, lunch: false, dinner: false, appetizer: false, side_dish: false, snack: false, dessert: false};
-    if (req.body.meal_type) {
-        const mealArray = req.body.meal_type;
+    if (recipeObj.meal_type) {
+        const mealArray = recipeObj.meal_type;
         for (let mealType of mealArray) {
-            if (mealType === 'breakfast') {
-                recipe.meal_type.breakfast = true;
-            } else if (mealType === 'lunch') {
-                recipe.meal_type.lunch = true;
-            } else if (mealType === 'dinner') {
-                recipe.meal_type.dinner = true;
-            } else if (mealType === 'appetizer') {
-                recipe.meal_type.appetizer = true;
-            } else if (mealType === 'side_dish') {
-                recipe.meal_type.side_dish = true;
-            } else if (mealType === 'snack') {
-                recipe.meal_type.snack = true;
-            } else if (mealType === 'dessert') {
-                recipe.meal_type.dessert = true;
-            } 
+            recipe.meal_type[mealType] = true;
         }
-    }
+    } 
+}
 
+function formatDietaryCategories(recipe: IRecipes, recipeObj: RecipeCreate){
     recipe.dietary_categories = {
         low_sodium: false, 
         low_fat: false, 
@@ -295,52 +328,25 @@ app.delete("/delete_recipe_by_name", async (req, res) => {
         vegan: false, 
         healthy: false
     }
-    if (req.body.dietary_categories) {
-        const dietaryCategories = req.body.dietary_categories;
+    if (recipeObj.dietary_categories) {
+        const dietaryCategories = recipeObj.dietary_categories;
 
         for (let category of dietaryCategories) {
-            console.log(category)
-            if (category === 'low_sodium') {
-                recipe.dietary_categories.low_sodium = true;
-            } else if (category === 'low_fat') {
-                recipe.dietary_categories.low_fat = true;
-            } else if (category === 'low_carb') {
-                recipe.dietary_categories.low_carb = true;
-            } else if (category === 'gluten_free') {
-                recipe.dietary_categories.gluten_free = true;
-            } else if (category === 'dairy_free') {
-                recipe.dietary_categories.dairy_free = true;
-            } else if (category === 'nut_free') {
-                recipe.dietary_categories.nut_free = true;
-            } else if (category === 'low_sugar') {
-                recipe.dietary_categories.low_sugar = true;
-            } else if (category === 'low_calories') {
-                recipe.dietary_categories.low_calories = true;
-            } else if (category === 'all_natural') {
-                recipe.dietary_categories.all_natural = true;
-            } else if (category === 'vegetarian') {
-                recipe.dietary_categories.vegetarian = true;
-            }  else if (category === 'vegan') {
-                recipe.dietary_categories.vegan = true;
-            } else if (category === 'healthy') {
-                recipe.dietary_categories.healthy = true;
-            }
+            recipe.dietary_categories[category] = true;
         }
     }
+}
 
-    if (req.body.dish_type) {
-        recipe.dish_type = String(req.body.dish_type);
-    }
-
-    if (req.body.ingredients_list) {
-        let ingredients = req.body.ingredients_list;
+function formatIngredientList(recipe: IRecipes, recipeObj: RecipeCreate){
+    if (recipeObj.ingredients_list) {
+        let ingredients = recipeObj.ingredients_list;
         let ingredientList: IIngredients[] = [];
         for (let ingredient of ingredients ){
             let ingredientObj = {} as IIngredients;
-            if (!ingredient.name) {
+            if (!ingredient.ingredient_name) {
                 continue;
             } else {
-                ingredientObj.ingredient_name = ingredient.name;
+                ingredientObj.ingredient_name = ingredient.ingredient_name;
             }
             if (ingredient.measurement_amount && ingredient.measurement_unit) {
                 ingredientObj.ingredient_measurement = {measurement_amount: ingredient.measurement_amount, measurement_unit: ingredient.measurement_unit} 
@@ -354,9 +360,11 @@ app.delete("/delete_recipe_by_name", async (req, res) => {
             recipe.ingredients =  ingredientList as [IIngredients];
         }
     }
+}
 
-    if (req.body.recipe_steps) {
-        let recipe_steps = req.body.recipe_steps;
+function formatRecipeSteps(recipe: IRecipes, recipeObj: RecipeCreate) {
+    if (recipeObj.recipe_steps) {
+        let recipe_steps = recipeObj.recipe_steps;
         let recipeSteps: IRecipeSteps[] = [];
         for (let i = 1; i <= recipe_steps.length; i++) {
             let recipeStep = {} as IRecipeSteps;
@@ -368,6 +376,4 @@ app.delete("/delete_recipe_by_name", async (req, res) => {
             recipe.recipe_steps =  recipeSteps as [IRecipeSteps];
         }
     }
-
-    return recipe;
-} */
+}

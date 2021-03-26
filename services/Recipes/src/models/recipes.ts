@@ -1,4 +1,62 @@
+import { AnyCnameRecord } from "dns";
 import mongoose, { Schema, Document } from "mongoose";
+
+export interface RecipeCreate {
+	name?: string, 
+	description?: string, 
+	prep_time?: number, 
+	cook_time?: number, 
+	servings?: number, 
+	calories?: number, 
+	yield_amount?: number, 
+	yield_unit?: string, 
+	meal_type?: string[], 
+	dietary_categories?: string[], 
+	dish_type?: string, 
+	ingredients_list?: [{ingredient_name: string, measurement_amount: number, measurement_unit: string, ingredient_type: string}]
+	recipe_steps?: string[]
+}
+
+interface Dietary_Categories {
+    [index: string]: any;
+    low_sodium?: boolean,
+    low_fat?: boolean,
+    low_carb?: boolean,
+    gluten_free?: boolean,
+    dairy_free?: boolean,
+    nut_free?: boolean,
+    low_sugar?: boolean,
+    low_calories?: boolean,
+    all_natural?: boolean,
+    vegetarian?: boolean,
+    vegan?: boolean,
+    healthy?: boolean,
+}
+
+interface Meal_Type {
+    [index: string]: any;
+    breakfast?: boolean,
+    lunch?: boolean,
+    dinner?: boolean,
+    appetizer?: boolean,
+    side_dish?: boolean,
+    snack?: boolean,
+    dessert?: boolean
+}
+
+export interface RecipeFilter {
+    filter_category: Dietary_Categories,
+    filter_meal_type: Meal_Type
+	filter_ingredient_contains: string[],
+	filter_ingredient_only: string[],
+	filter_ingredient_exclude: string[]
+}
+
+export interface RecipeUpdate{
+    id?: String,
+    name?: String
+    updates: RecipeCreate
+}
 
 export interface IRecipes extends Document {
     name?: string,
@@ -11,29 +69,8 @@ export interface IRecipes extends Document {
         yield_amount?: number,
         yield_unit?: string
     },
-    meal_type: {
-        breakfast: boolean,
-        lunch: boolean,
-        dinner: boolean,
-        appetizer: boolean,
-        side_dish: boolean,
-        snack: boolean,
-        dessert: boolean
-    },
-    dietary_categories: {
-        low_sodium: boolean,
-        low_fat: boolean,
-        low_carb: boolean,
-        gluten_free: boolean,
-        dairy_free: boolean,
-        nut_free: boolean,
-        low_sugar: boolean,
-        low_calories: boolean,
-        all_natural: boolean,
-        vegetarian: boolean,
-        vegan: boolean,
-        healthy: boolean
-    },
+    meal_type: Meal_Type,
+    dietary_categories: Dietary_Categories,
     dish_type: string,
     ingredients: [IIngredients],
     recipe_steps: [IRecipeSteps]
