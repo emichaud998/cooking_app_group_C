@@ -14,6 +14,7 @@ export interface RecipeCreate {
 	dietary_categories?: string[], 
 	dish_type?: string, 
 	ingredients?: IngredientCreate[],
+    ingredients_extra?: IngredientCreate[],
 	recipe_steps?: string[]
 }
 
@@ -87,6 +88,7 @@ export interface IRecipes extends Document {
     dietary_categories: Dietary_Categories,
     dish_type: string,
     ingredients: [IIngredients],
+    ingredients_extra : [IIngredients],
     recipe_steps: [IRecipeSteps]
 }
 
@@ -159,6 +161,7 @@ const RecipesSchema: Schema = new Schema({
   },
   dish_type: {type: String},
   ingredients: [IngredientsSchema],
+  ingredients_extra: [IngredientsSchema],
   recipe_steps: [RecipeStepsSchema]
 });
 

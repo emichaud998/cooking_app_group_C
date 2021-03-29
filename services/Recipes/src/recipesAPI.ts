@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesLimit, GetRecipesByName, FilterRecipes, UpdateRecipeID, UpdateRecipeName, GetIngredients } from "./crudOperations";
-import { IRecipes, IIngredients, IRecipeSteps, RecipeCreate, RecipeFilter } from "./models/recipesModels";
+import { IRecipes, IIngredients, IRecipeSteps, RecipeCreate, RecipeFilter, IngredientCreate } from "./models/recipesModels";
 
 const app = express();
 app.use(express.json());
@@ -293,6 +293,7 @@ function formatRecipe(recipeObj: RecipeCreate) {
     }
 
     formatIngredientList(recipe, recipeObj);
+    formatIngredientExtraList(recipe, recipeObj);
 
     formatRecipeSteps(recipe, recipeObj);
 
@@ -381,6 +382,39 @@ function formatIngredientList(recipe: IRecipes, recipeObj: RecipeCreate){
     }
 }
 
+// Format ingredient list nested field of recipe object using request information
+function formatIngredientExtraList(recipe: IRecipes, recipeObj: RecipeCreate){
+  if (recipeObj.ingredients) {
+      let extraIngredients: IngredientCreate[] = []
+      if (recipeObj.ingredients_extra) {
+        extraIngredients = recipeObj.ingredients_extra;
+      }
+      let ingredientExtraList: IIngredients[] = [];
+      for (let ingredient of extraIngredients ){
+          let ingredientObj = {} as IIngredients;
+
+          // Do not add ingredient if it is not supplied a name, otherwise add ingredient name to ingredient object
+          if (!ingredient.ingredient_name) {
+              continue;
+          } else {
+              ingredientObj.ingredient_name = ingredient.ingredient_name;
+          }
+          // Only add a measurement amount if a measurment unit is also supplied to ingredient object
+          if (ingredient.measurement_amount && ingredient.measurement_unit) {
+              ingredientObj.ingredient_measurement = {measurement_amount: ingredient.measurement_amount, measurement_unit: ingredient.measurement_unit} 
+          }
+          // Add ingredient type to ingredient object
+          if (ingredient.ingredient_type) {
+              ingredientObj.ingredient_type = ingredient.ingredient_type
+          }
+          ingredientExtraList.push(ingredientObj);
+      } 
+      if (ingredientExtraList.length > 0) {
+          recipe.ingredients_extra =  ingredientExtraList as [IIngredients];
+      }
+  }
+}
+
 // Format recipe steps nested field of recipe object using request information
 function formatRecipeSteps(recipe: IRecipes, recipeObj: RecipeCreate) {
     if (recipeObj.recipe_steps) {
@@ -430,14 +464,14 @@ function createFilterQuery(filterObj: RecipeFilter) {
             let mealTypeObj = {[key]: true};
             mealTypeQueryArr.push(mealTypeObj);
         }
-        mealTypeQuery = { $and: mealTypeQueryArr}
+        mealTypeQuery = { $or: mealTypeQueryArr}
         filterQuery.push(mealTypeQuery);
     }
 
     // Create ingredient filter list that either checks if a recipe's ingredient list contains at least one of the filtering ingredients, 
     // or if a recipe's ingredient list contains all of the filtering ingredients
     if (filterObj.filter_ingredient_contains && filterObj.filter_ingredient_contains.length > 0) {
-        ingredientIncludeQuery = { "ingredients.ingredient_name": { $in:  filterObj.filter_ingredient_contains} }
+        ingredientIncludeQuery = {$or:[{"ingredients.ingredient_name": { $in:  filterObj.filter_ingredient_contains}}, {"ingredients_extra.ingredient_name": { $in:  filterObj.filter_ingredient_contains} }]}
         filterQuery.push(ingredientIncludeQuery);
     }else if (filterObj.filter_ingredient_only && filterObj.filter_ingredient_only.length > 0) {
         ingredientIncludeQuery =  {$expr:{$setIsSubset:["$ingredients.ingredient_name",filterObj.filter_ingredient_only]}},{_id:0};

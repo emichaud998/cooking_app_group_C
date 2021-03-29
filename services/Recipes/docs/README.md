@@ -89,6 +89,7 @@ const RecipesSchema: Schema = new Schema({
   },
   dish_type: {type: String},
   ingredients: [IngredientsSchema],
+  ingredients_extra: [IngredientsSchema],
   recipe_steps: [RecipeStepsSchema]
 });
 
@@ -127,6 +128,11 @@ const RecipeStepsSchema: Schema  = new Schema({
             "measurement_amount": number, 
             "measurement_unit": string, 
             "ingredient_type": string}],
+        "ingredients_extra": [{ // Any extra non-necessary ingredients- omitted if no extra ingredients
+            "ingredient_name": string, 
+            "measurement_amount": number, 
+            "measurement_unit": string, 
+            "ingredient_type": string}],
         "recipe_steps": string[]
     }
 ```
@@ -153,6 +159,11 @@ const RecipeStepsSchema: Schema  = new Schema({
             "measurement_amount": number, 
             "measurement_unit": string, 
             "ingredient_type": string}],
+        "ingredients_extra": [{ // Replaces old ingredients extra list with new ingredients list
+            "ingredient_name": string, 
+            "measurement_amount": number, 
+            "measurement_unit": string, 
+            "ingredient_type": string}],
         "recipe_steps": string[] // Replaces old recipe_steps array with new recipe_steps array
     }
 ```
@@ -161,7 +172,7 @@ const RecipeStepsSchema: Schema  = new Schema({
 
 ```typescript
     "filter_category": string[], // Find recipes who has these listed categories set to true
-    "filter_meal_type": string[], // Find recipes who has these listed meal types set to true
+    "filter_meal_type": string[], // Find recipes who has one of these listed meal types set to true
 	"filter_ingredient_contains": string[], // Find recipes who contain at least one of these listed ingredients
 	"filter_ingredient_only": string[], // Find recipes who contain all of these listed ingredients
 	"filter_ingredient_exclude": string[] // Find recipes who do not contain any of these listed ingredients
@@ -230,15 +241,6 @@ Example response:
                 },
                 {
                     "ingredient_measurement": {
-                        "measurement_amount": 1,
-                        "measurement_unit": "teaspoons"
-                    },
-                    "_id": "605d61608ef41b2471f31ac5",
-                    "ingredient_name": "salt",
-                    "ingredient_type": "seasoning"
-                },
-                {
-                    "ingredient_measurement": {
                         "measurement_amount": 4,
                         "measurement_unit": "teaspoons"
                     },
@@ -281,6 +283,15 @@ Example response:
                     "_id": "605d61608ef41b2471f31aca",
                     "ingredient_name": "butter",
                     "ingredient_type": "dairy"
+                },
+                {
+                    "ingredient_measurement": {
+                        "measurement_amount": 1,
+                        "measurement_unit": "teaspoons"
+                    },
+                    "_id": "605d61608ef41b2471f31ac5",
+                    "ingredient_name": "salt",
+                    "ingredient_type": "seasoning"
                 },
                 {
                     "ingredient_measurement": {
@@ -391,7 +402,9 @@ Example response:
                     "_id": "605d639c8ef41b2471f31ad4",
                     "ingredient_name": "vanilla extract",
                     "ingredient_type": "sweetener"
-                },
+                }
+            ],
+            "ingredients_extra": [
                 {
                     "ingredient_measurement": {
                         "measurement_amount": 1,
@@ -524,7 +537,9 @@ Example response:
                     "_id": "605d65cb8ef41b2471f31ae0",
                     "ingredient_name": "bread crumbs",
                     "ingredient_type": "grains"
-                },
+                }
+            ],
+            "ingredients_extra": [
                 {
                     "ingredient_measurement": {
                         "measurement_amount": 1,
@@ -711,7 +726,9 @@ Example response:
                 "_id": "605d65cb8ef41b2471f31ae0",
                 "ingredient_name": "bread crumbs",
                 "ingredient_type": "grains"
-            },
+            }
+        ],
+        "ingredients_extra": [
             {
                 "ingredient_measurement": {
                     "measurement_amount": 1,
@@ -927,11 +944,14 @@ Example Request Body:
         {"ingredient_name": "cashew butter", "measurement_amount": 1, "measurement_unit": "tablespoons",
         "ingredient_type": "nuts"},
         {"ingredient_name": "vanilla extract", "measurement_amount": 1, "measurement_unit": "teaspoons",
-        "ingredient_type": "sweetener"},
+        "ingredient_type": "sweetener"}
+    ],
+    "ingredients_extra": [
         {"ingredient_name": "almonds", "measurement_amount": 1, "measurement_unit": "tablespoon (sliced)",
         "ingredient_type": "nuts"},
         {"ingredient_name": "shredded coconut", "measurement_amount": 1, "measurement_unit": "tablespoons",
-        "ingredient_type": "nuts"}], 
+        "ingredient_type": "nuts"}
+    ], 
 	"recipe_steps": ["Blend blueberries, 1/2 banana, water, cashew butter, and vanilla extract together in a blender until smooth; pour into a bowl.", "Top smoothie with sliced banana, almonds, and coconut."]
 }
 
@@ -1022,7 +1042,9 @@ Example response:
                     "measurement_unit": "teaspoons"
                 },
                 "ingredient_type": "sweetener"
-            },
+            }
+        ],
+        "ingredients_extra": [
             {
                 "_id": "605d639c8ef41b2471f31ad5",
                 "ingredient_name": "almonds",
@@ -1184,7 +1206,9 @@ Example response:
                     "_id": "605d65cb8ef41b2471f31ae0",
                     "ingredient_name": "bread crumbs",
                     "ingredient_type": "grains"
-                },
+                }
+            ],
+            "ingredients_extra": [
                 {
                     "ingredient_measurement": {
                         "measurement_amount": 1,
@@ -1350,7 +1374,9 @@ Example response:
                 "_id": "605d65cb8ef41b2471f31ae0",
                 "ingredient_name": "bread crumbs",
                 "ingredient_type": "grains"
-            },
+            }
+        ],
+        "ingredients_extra": [
             {
                 "ingredient_measurement": {
                     "measurement_amount": 1,
@@ -1509,7 +1535,9 @@ Example response:
                 "_id": "605d639c8ef41b2471f31ad4",
                 "ingredient_name": "vanilla extract",
                 "ingredient_type": "sweetener"
-            },
+            }
+        ], 
+        "ingredients_extra": [
             {
                 "ingredient_measurement": {
                     "measurement_amount": 1,

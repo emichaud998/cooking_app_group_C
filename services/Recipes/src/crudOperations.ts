@@ -55,13 +55,29 @@ export async function GetRecipesLimit(limit: number, skip:number): Promise<IReci
 
 // Get all ingredients names from DB
 export async function GetIngredients(): Promise<string[]> {
-  return Recipe.distinct('ingredients.ingredient_name')
+  let ingredientArr: string[] = [];
+  await Recipe.distinct('ingredients.ingredient_name')
     .then((data: string[]) => {
-      return data;
+      for (let ingredient of data) {
+        ingredientArr.push(ingredient);
+      }
     })
     .catch((error: Error) => {
       throw error;
     });
+
+  return Recipe.distinct('ingredients_extra.ingredient_name')
+  .then((data: string[]) => {
+    for (let ingredient of data) {
+      if (!ingredientArr.includes(ingredient)) {
+        ingredientArr.push(ingredient);
+      }
+    }
+    return ingredientArr;
+  })
+  .catch((error: Error) => {
+    throw error;
+  });
 }
 
 // Create new recipe entry in DB 
