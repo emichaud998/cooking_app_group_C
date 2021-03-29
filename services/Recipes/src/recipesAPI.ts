@@ -23,7 +23,7 @@ db.once("open", () => {
   console.log("[server] database connected!");
 
   // Returns all recipes with all information from DB
-  app.get("/get_recipes", async (req, res) => {
+  app.get("/api/recipes/get_recipes", async (req, res) => {
 
     // Skip by 0 entries if not provided, otherwise skip by skip parameter places into DB
     let skip = 0;
@@ -47,7 +47,7 @@ db.once("open", () => {
   });
 
   // Returns all distinct ingredient names from DB
-  app.get("/get_ingredients_list", async (req, res) => {
+  app.get("/api/recipes/get_ingredients_list", async (req, res) => {
     try {
       const ingredients = await GetIngredients();
       res.json({ count: ingredients.length, ingredients: ingredients });
@@ -58,7 +58,7 @@ db.once("open", () => {
   });
 
   // Returns one recipe specified by ID param with all its information 
-  app.get("/get_recipe_by_id", async (req, res) => {
+  app.get("/api/recipes/get_recipe_by_id", async (req, res) => {
     if (!req.query.id) {
       res.status(400);
       return res.json({ error: "Missing 'id' field" });
@@ -78,7 +78,7 @@ db.once("open", () => {
   });
 
   // Returns one recipe specified by name param with all its information 
-  app.get("/get_recipes_by_name", async (req, res) => {
+  app.get("/api/recipes/get_recipes_by_name", async (req, res) => {
     if (!req.query.name) {
       res.status(400);
       return res.json({ error: "Missing 'name' field" });
@@ -98,7 +98,7 @@ db.once("open", () => {
   });
 
   // Creates a new recipe entry in DB
-  app.post("/create_recipe", async (req, res) => {
+  app.post("/api/recipes/create_recipe", async (req, res) => {
     if (!req.body.name) {
         res.status(400);
         return res.json({ error: "Missing 'name' field" });
@@ -125,7 +125,7 @@ db.once("open", () => {
   });
 
   // Filters recipe list by categories, ingredients, and/or meal type
-  app.post("/filter_recipes", async (req, res) => {
+  app.post("/api/recipes/filter_recipes", async (req, res) => {
     let filterQuery = createFilterQuery(req.body);
 
     // Skip by 0 entries if not provided, otherwise skip by skip parameter places into DB
@@ -161,7 +161,7 @@ db.once("open", () => {
   });
 
   // Update recipe associated with id param with update param information
-  app.put("/update_recipe_by_id", async (req, res) => {
+  app.put("/api/recipes/update_recipe_by_id", async (req, res) => {
     if (!req.body.id) {
       res.status(400);
       return res.json({ error: "Missing 'id' field" });
@@ -188,7 +188,7 @@ db.once("open", () => {
   })
 
   // Update recipe associated with name param with update param information
-  app.put("/update_recipe_by_name", async (req, res) => {
+  app.put("/api/recipes/update_recipe_by_name", async (req, res) => {
     if (!req.body.name) {
       res.status(400);
       return res.json({ error: "Missing 'name' field" });
@@ -215,7 +215,7 @@ db.once("open", () => {
   })
 
   // Delete recipe associated with id param from DB
-  app.delete("/delete_recipe_by_id", async (req, res) => {
+  app.delete("/api/recipes/delete_recipe_by_id", async (req, res) => {
     if (!req.query.id) {
       res.status(400);
       return res.json({ error: "Missing 'id' field" });
@@ -235,7 +235,7 @@ db.once("open", () => {
   });
 
 // Delete recipe associated with name param from DB
-app.delete("/delete_recipe_by_name", async (req, res) => {
+app.delete("/api/recipes/delete_recipe_by_name", async (req, res) => {
     if (!req.query.name) {
       res.status(400);
       return res.json({ error: "Missing 'name' field" });

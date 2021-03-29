@@ -177,14 +177,28 @@ const RecipeStepsSchema: Schema  = new Schema({
 	"filter_ingredient_only": string[], // Find recipes who contain all of these listed ingredients
 	"filter_ingredient_exclude": string[] // Find recipes who do not contain any of these listed ingredients
 ```
-## Recipes HTTP REST API Endpoints
 
-### (GET) `/get_recipes`: return a list of all recipes- can supply optional limit and skip number:
+## Recipes HTTP REST API Endpoints List
+1. `/api/recipes/get_recipes` : Get list of all recipes and their information
+2. `/api/recipes/get_ingredients_list` : Get list of all unique ingredient names from all recipes
+3. `/api/recipes/get_recipe_by_id` : Get recipe information for a particular recipe using its ID
+4. `/api/recipes/get_recipes_by_name` : Get recipe information for one or more recipes that contain the supplied name in their recipe name
+5. `/api/recipes/create_recipe` : Create a new recipe
+6. `/api/recipes/filter_recipes` : Filter recipes by meal type, dietary preferences, and ingredients
+7. `/api/recipes/update_recipe_by_id` : Update a particular recipe using its ID
+8. `/api/recipes/update_recipe_by_name` : Update a particular recipe using its EXACT name
+9. `/api/recipes/delete_recipe_by_id` : Delete a particular recipe using its ID
+10. `/api/recipes/delete_recipe_by_name` : Delete a particular recipe using its EXACT name
+
+
+## Recipes HTTP REST API Endpoints Examples
+
+### (GET) `/api/recipes/get_recipes`: return a list of all recipes- can supply optional limit and skip number:
 
 Example request:
 
 ```
-http://localhost:8000/get_recipes?limit=3&skip=0
+http://localhost:8000/api/recipes/get_recipes?limit=3&skip=0
 ```
 
 Example response:
@@ -578,12 +592,12 @@ Example response:
 }
 ```
 
-### (GET) `/get_ingredients_list`: get list of all distinct ingredients
+### (GET) `/api/recipes/get_ingredients_list`: get list of all distinct ingredients
 
 Example request:
 
 ```
-http://localhost:8000/get_ingredients_list
+http://localhost:8000/api/recipes/get_ingredients_list
 ```
 
 Example response:
@@ -615,12 +629,12 @@ Example response:
 ```
 
 
-### (GET) `/get_recipe_by_id`: get recipe by id
+### (GET) `/api/recipes/get_recipe_by_id`: get recipe by id
 
 Example request:
 
 ```
-http://localhost:8000/get_recipe_by_id/?id=605d65cb8ef41b2471f31ae2
+http://localhost:8000/api/recipes/get_recipe_by_id?id=605d65cb8ef41b2471f31ae2
 ```
 
 Example response:
@@ -766,12 +780,12 @@ Example response:
 }
 ```
 
-### (GET) `/get_recipes_by_name`: get list of recipe(s) containing name
+### (GET) `/api/recipes/get_recipes_by_name`: get list of recipe(s) containing name
 
 Example request:
 
 ```
-http://localhost:8000/get_recipes_by_name/?name=waffle
+http://localhost:8000/api/recipes/get_recipes_by_name?name=waffle
 ```
 
 Example response:
@@ -912,12 +926,12 @@ Example response:
 }
 ```
 
-### (POST) `/create_recipe`: create new recipe
+### (POST) `/api/recipes/create_recipe`: create new recipe
 
 Example request:
 
 ```
-http://localhost:8000/create_recipe
+http://localhost:8000/api/recipes/create_recipe
 ```
 
 Example Request Body:
@@ -1081,12 +1095,12 @@ Example response:
 }
 ```
 
-### (POST) `/filter_recipes`: get filtered list of recipes filtered by one or more of the supported filters (or returns full recipe list if no filters provided)- - can supply optional limit and skip number
+### (POST) `/api/recipes/filter_recipes`: get filtered list of recipes filtered by one or more of the supported filters (or returns full recipe list if no filters provided)- - can supply optional limit and skip number
 
 Example request:
 
 ```
-http://localhost:8000/filter_recipes?limit=1&skip=0
+http://localhost:8000/api/recipes/filter_recipes?limit=1&skip=0
 ```
 
 Example Request Body:
@@ -1247,12 +1261,12 @@ Example response:
 }
 ```
 
-### (PUT) `/update_recipe_by_id`: updates recipe information for existing recipe by id
+### (PUT) `/api/recipes/update_recipe_by_id`: updates recipe information for existing recipe by id
 
 Example request:
 
 ```
-http://localhost:8000/update_recipe_by_id
+http://localhost:8000/api/recipes/update_recipe_by_id?id=605d65cb8ef41b2471f31ad9
 ```
 
 Example Request Body:
@@ -1414,12 +1428,12 @@ Example response:
 }
 ```
 
-### (PUT) `/update_recipe_by_name`: updates recipe information for existing recipe by exact name
+### (PUT) `/api/recipes/update_recipe_by_name`: updates recipe information for existing recipe by exact name
 
 Example request:
 
 ```
-http://localhost:8000/update_recipe_by_name
+http://localhost:8000/api/recipes/update_recipe_by_name?name=Homemade Mac and Cheese
 ```
 
 
@@ -1442,12 +1456,12 @@ Example response:
 
 Same as above example
 
-### (DELETE) `/delete_recipe_by_id`: delete existing recipe by id
+### (DELETE) `/api/recipes/delete_recipe_by_id`: delete existing recipe by id
 
 Example request:
 
 ```
-http://localhost:8000/delete_recipe_by_id?id=605d639c8ef41b2471f31acf
+http://localhost:8000/api/recipes/delete_recipe_by_id?id=605d639c8ef41b2471f31acf
 ```
 
 Example response:
@@ -1574,12 +1588,12 @@ Example response:
 }
 ```
 
-### (DELETE) `/delete_recipe_by_name`: delete existing recipe by exact name
+### (DELETE) `/api/recipes/delete_recipe_by_name`: delete existing recipe by exact name
 
 Example request:
 
 ```
-http://localhost:8000/delete_recipe_by_name?name=Blueberry Smoothie Bowl
+http://localhost:8000/api/recipes/delete_recipe_by_name?name=Blueberry Smoothie Bowl
 ```
 
 Example response:
