@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  comment-service-mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "$MONGO_INITDB_ROOT_USERNAME"
+      MONGO_INITDB_ROOT_PASSWORD: "$MONGO_INITDB_ROOT_PASSWORD"
+      MONGO_DATABASE: "$MONGO_DATABASE"
+      MONGO_USERNAME: "$MONGO_USERNAME"
+      MONGO_PASSWORD: "$MONGO_PASSWORD"
+    env_file:
+      - .env
+    ports:
+      - 27017:27017
+    volumes:
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
