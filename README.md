@@ -4,6 +4,7 @@ Our project idea is to create a cooking recipe application using microservices t
 
 # Exemplars
 
+
 - [ESLint and Launch JSON Exemplar](exemplars/eslint_and_launchJson_exemplar/doc/README.md) -Author: Andrew Leger
 - [Express Server Exemplar](exemplars/express_exemplar/doc/README.md) -Author: Emily Michaud
 - [Django with Docker Exemplar](exemplars/simple-django-with-docker/README.md) -Author: Duy Pham
@@ -12,3 +13,4 @@ Our project idea is to create a cooking recipe application using microservices t
 - [TypeScript HTML Exemplar](exemplars/typescript_html_exemplar/doc/README.md) -Author: Emily Michaud
 - [Express Auto Routing Exemplar](exemplars/express-auto-routing/doc/README.md) -Author: Thanh Phan
 - [Simple JWT Authentication Exemplar](exemplars/simple-jwt-authentication/doc/README.md) -Author: Thanh Phan
+- [Recipe Microservice Exemplar](exemplars/recipe_microservice_exemplar/doc/README.md) -Author: Emily Michaud
