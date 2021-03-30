@@ -1,4 +1,5 @@
 # Recipes Microservice Exemplar
+Author: Emily Michaud 
 
 ## Overview
 This Exemplar shows how to communicate with each of the Recipes Microservice endpoints. The Recipes Microservice coordinates inserts, updates, deletes, and retrievals from the Recipes MongoDB collection and supports the following operations with 10 HTTP REST API endpoints which are all shown in this exemplar:

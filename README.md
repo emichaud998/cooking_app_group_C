@@ -10,4 +10,5 @@ Our project idea is to create a cooking recipe application using microservices t
 * [TypeScript Crud App Exemplar](exemplars/simple-ts-crud-app/doc/README.md) -Author: Duy Pham
 * [SQL Exemplar with pgPromise](exemplars/sql_exemplar_with_pgPromise/doc/README.md) -Author: Andrew Leger
 * [TypeScript HTML Exemplar](exemplars/typescript_html_exemplar/doc/README.md) -Author: Emily Michaud
+* [Recipe Microservice Exemplar](exemplars/recipe_microservice_exemplar/doc/README.md) -Author: Emily Michaud
 
