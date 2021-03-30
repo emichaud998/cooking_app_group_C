@@ -46,6 +46,7 @@ interface RecipeCreate {
 	dietary_categories?: string[], 
 	dish_type?: string, 
 	ingredients?: IngredientCreate[],
+    ingredients_extra?: IngredientCreate[],
 	recipe_steps?: string[]
 }
 
@@ -89,7 +90,20 @@ async function populateRecipes() {
             ingredientsList.push(newIngredient);
         }
 
-        newRecipe.ingredients = ingredientsList;
+        index = faker.datatype.number({'min': 0, 'max': 4});
+        if (index > 0) {
+            let ingredientsExtraList: IngredientCreate[] = [];
+            for (let i = 1; i <= index; i++) {
+                let newIngredient = {} as IngredientCreate;
+                newIngredient.ingredient_name = faker.commerce.productMaterial();
+                newIngredient.measurement_amount = faker.datatype.number({'min': 1, 'max': 10});
+                newIngredient.measurement_unit = faker.random.word();
+                newIngredient.ingredient_type = faker.commerce.productAdjective();
+                ingredientsExtraList.push(newIngredient);
+            }
+
+            newRecipe.ingredients_extra = ingredientsExtraList;
+        }
 
         // Send fake recipe to Recipe microservice creation endpoint
         let postURL = url+'/create_recipe';
