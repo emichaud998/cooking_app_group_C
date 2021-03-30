@@ -106,7 +106,7 @@ async function populateRecipes() {
         }
 
         // Send fake recipe to Recipe microservice creation endpoint
-        let postURL = url+'/create_recipe';
+        let postURL = url+'/api/recipes/create_recipe';
         try {
             await axios.post(postURL, newRecipe)
             console.log("Added " + recipes.toString() + "/" + totalRecipes.toString()+ " Recipes!");

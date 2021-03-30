@@ -126,7 +126,7 @@ function populateRecipes() {
                         }
                         newRecipe.ingredients_extra = ingredientsExtraList;
                     }
-                    postURL = url + '/create_recipe';
+                    postURL = url + '/api/recipes/create_recipe';
                     _a.label = 2;
                 case 2:
                     _a.trys.push([2, 5, , 6]);
