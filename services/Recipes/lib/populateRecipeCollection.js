@@ -78,7 +78,7 @@ function recipeMockData() {
 }
 function populateRecipes() {
     return __awaiter(this, void 0, void 0, function () {
-        var recipes, newRecipe, index, i, ingredientsList, i, newIngredient, postURL, error_1;
+        var recipes, newRecipe, index, i, ingredientsList, i, newIngredient, ingredientsExtraList, i, newIngredient, postURL, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -113,7 +113,19 @@ function populateRecipes() {
                         newIngredient.ingredient_type = faker.commerce.productAdjective();
                         ingredientsList.push(newIngredient);
                     }
-                    newRecipe.ingredients = ingredientsList;
+                    index = faker.datatype.number({ 'min': 0, 'max': 4 });
+                    if (index > 0) {
+                        ingredientsExtraList = [];
+                        for (i = 1; i <= index; i++) {
+                            newIngredient = {};
+                            newIngredient.ingredient_name = faker.commerce.productMaterial();
+                            newIngredient.measurement_amount = faker.datatype.number({ 'min': 1, 'max': 10 });
+                            newIngredient.measurement_unit = faker.random.word();
+                            newIngredient.ingredient_type = faker.commerce.productAdjective();
+                            ingredientsExtraList.push(newIngredient);
+                        }
+                        newRecipe.ingredients_extra = ingredientsExtraList;
+                    }
                     postURL = url + '/create_recipe';
                     _a.label = 2;
                 case 2:
