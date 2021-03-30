@@ -5,7 +5,7 @@ import { IRecipes, IIngredients, IRecipeSteps, RecipeCreate, RecipeFilter, Ingre
 
 const app = express();
 app.use(express.json());
-const PORT = 8000;
+const PORT = 8091;
 
 // Connect to mongodb database
 const uri = `mongodb://localhost/Recipes`
