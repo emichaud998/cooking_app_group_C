@@ -1,0 +1,23 @@
+# Cooking Recipe App
+
+## Vision Statement
+Our vision is to make cooking from home and finding delicious and healthy recipes an easy and enjoyable experience. Many people today would rather buy expensive take out food over cooking much healthier meals at home. This is usually due to it being easier and more convenient to buy take out than to find the right recipes that coincide with their tastes, dietary preferences, and what ingredients they already keep in their homes. We aim to deliver an extensive recipe filtering system that is fast and accurate, an efficient storage system that allow user's to create and share new recipes, a clear and attractive recipe browsing system that supports rating, and commenting, and a responsive virtual shopping list that users can easily use to keep track of ingredients that may want while browsing recipes. Our team strives to create an application that provides the best recipe finder experience because we understand that people should be able to quickly and easily find the right recipes for them and their familes, and share their own recipes with others to easily find and enjoy as well.
+
+## Principles and Practices Statement
+In order to achieve our vision of creating an efficient recipe finding and sharing application, we have created some key principles and practices that will help guide us towards the goals we are trying to achieve. We want to create an efficient, fast, and scalable application that will be able to grow with an increasing number of recipes and quickly filter through this increasing number of recipes in order to quickly find recipes that meet the user's needs and preferences. 
+
+### Principles
+We have created some key principles in order to align with our main goals for our application. One important princple we have implemented is that each team member has full control over their own created microservice, but can be assisted by other team members. This will allow us to work efficiently on our own sections of code while being remote and in different timezones. Another principle we have made is that we must design our code with scalability in mind, so that our system can support a large growing number of recipes and be able to change over time. Another principle we have made is that our application must be efficient and fast when filtering large amounts of recipes, since this is the main goal we strive to achieve for our application. One final princple we have created is that every service must exist in its own bounded context and should be responsible for only a single functionalty to allow for scalability and change.
+
+### Practices
+We also have chosen some key practices that will ensure our principles are being carried out. One practice we have decided on is that MongoDB should be used for due to its document storage structure which allows us to nest information such as ingredients and recipe steps within each recipe. MongoDB has efficient filtering capabilities on nested fields which will make filtering recipes by ingredients more efficient. Another important practice we will follow is using NGINX for the API gateway due to its ability to efficiently handle a high volume of connections and its ability to act as a reverse proxy and load balancer, which will help ease microservice scalability. Another practice we created ensures we will use HTTP/REST as the standard integration style due to its ability provide a great deal of flexibility. A REST API can handle multiple types of CRUD calls, return different data formats, and allows our APIs to change internally without affecting the outward API endpoints. 
+
+These principles and practices may change over time, but they will be used as a guideline to ensure every team member is writing code that falls in line with our main goals for the application.
+
+## Prototype Design
+
+
+The prototype design write up will present a design of your application and how it works. This should be a rough sketch to convey to the reader the choices you have made. It should highlight the technologies that are used, the choice of integration technology and why, and how you are implementing that integration technology. You must provide at least 1 image/figure in this write up.
+This write up should be approximately 250 - 350 words  with a clear introduction and conclusion. This statement should not be a list, it must be clearly written paragraphs that are clear and concise.
+
+## Exemplars
