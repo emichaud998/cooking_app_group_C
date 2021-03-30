@@ -198,7 +198,7 @@ const RecipeStepsSchema: Schema  = new Schema({
 Example request:
 
 ```
-http://localhost:8000/api/recipes/get_recipes?limit=3&skip=0
+http://localhost:8091/api/recipes/get_recipes?limit=3&skip=0
 ```
 
 Example response:
@@ -597,7 +597,7 @@ Example response:
 Example request:
 
 ```
-http://localhost:8000/api/recipes/get_ingredients_list
+http://localhost:8091/api/recipes/get_ingredients_list
 ```
 
 Example response:
@@ -634,7 +634,7 @@ Example response:
 Example request:
 
 ```
-http://localhost:8000/api/recipes/get_recipe_by_id?id=605d65cb8ef41b2471f31ae2
+http://localhost:8091/api/recipes/get_recipe_by_id?id=605d65cb8ef41b2471f31ae2
 ```
 
 Example response:
@@ -785,7 +785,7 @@ Example response:
 Example request:
 
 ```
-http://localhost:8000/api/recipes/get_recipes_by_name?name=waffle
+http://localhost:8091/api/recipes/get_recipes_by_name?name=waffle
 ```
 
 Example response:
@@ -931,7 +931,7 @@ Example response:
 Example request:
 
 ```
-http://localhost:8000/api/recipes/create_recipe
+http://localhost:8091/api/recipes/create_recipe
 ```
 
 Example Request Body:
@@ -1100,7 +1100,7 @@ Example response:
 Example request:
 
 ```
-http://localhost:8000/api/recipes/filter_recipes?limit=1&skip=0
+http://localhost:8091/api/recipes/filter_recipes?limit=1&skip=0
 ```
 
 Example Request Body:
@@ -1266,7 +1266,7 @@ Example response:
 Example request:
 
 ```
-http://localhost:8000/api/recipes/update_recipe_by_id?id=605d65cb8ef41b2471f31ad9
+http://localhost:8091/api/recipes/update_recipe_by_id?id=605d65cb8ef41b2471f31ad9
 ```
 
 Example Request Body:
@@ -1433,7 +1433,7 @@ Example response:
 Example request:
 
 ```
-http://localhost:8000/api/recipes/update_recipe_by_name?name=Homemade Mac and Cheese
+http://localhost:8091/api/recipes/update_recipe_by_name?name=Homemade Mac and Cheese
 ```
 
 
@@ -1461,7 +1461,7 @@ Same as above example
 Example request:
 
 ```
-http://localhost:8000/api/recipes/delete_recipe_by_id?id=605d639c8ef41b2471f31acf
+http://localhost:8091/api/recipes/delete_recipe_by_id?id=605d639c8ef41b2471f31acf
 ```
 
 Example response:
@@ -1593,7 +1593,7 @@ Example response:
 Example request:
 
 ```
-http://localhost:8000/api/recipes/delete_recipe_by_name?name=Blueberry Smoothie Bowl
+http://localhost:8091/api/recipes/delete_recipe_by_name?name=Blueberry Smoothie Bowl
 ```
 
 Example response:
