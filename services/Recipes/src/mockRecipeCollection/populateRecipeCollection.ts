@@ -89,6 +89,7 @@ async function populateRecipes() {
             newIngredient.ingredient_type = faker.commerce.productAdjective();
             ingredientsList.push(newIngredient);
         }
+        newRecipe.ingredients = ingredientsList;
 
         index = faker.datatype.number({'min': 0, 'max': 4});
         if (index > 0) {
