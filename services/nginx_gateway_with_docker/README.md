@@ -22,6 +22,6 @@ Directories:
 Endpoints:
     As described in their respective microservices.
     
-    Currently supported:
+Currently supported:
     
-    [Recipes](https://github.com/emichaud998/cooking_app_group_C/tree/master/services/Recipes#recipes-http-rest-api-endpoints-list)
+[Recipes](https://github.com/emichaud998/cooking_app_group_C/tree/master/services/Recipes#recipes-http-rest-api-endpoints-list)
