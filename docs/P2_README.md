@@ -47,7 +47,7 @@ This Exemplar shows how to communicate with each of the Recipes Microservice end
 ### Nginx API Gateway Server
 Author: Andrew Leger
 
-insert link here
+[Nginx Documentation](https://github.com/emichaud998/cooking_app_group_C/tree/master/services/nginx_gateway_with_docker)
 
 ### Overview
 The Nginx API server is a simple Nginx server run on a docker container, serving only one endpoint localhost:443/api/recipes/get_recipes
