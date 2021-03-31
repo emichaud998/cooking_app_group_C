@@ -30,7 +30,7 @@ While this prototype design may change, this version 1 prototype architecture di
 ## Project Phase Presentation
 [Presentation Slides Link](https://docs.google.com/presentation/d/1ZAVOpoEdK-_AqgSSZVpYKRnEdNewYfDFvcJxdSQgusU/edit?usp=sharing)
 
-[Video Link]()
+[Video Link](https://youtu.be/rdxF4Rm3Bj4)
 
 ## Exemplars
 
