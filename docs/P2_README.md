@@ -48,3 +48,14 @@ insert link here
 The Nginx API server is a simple Nginx server run on a docker container, serving only one endpoint localhost:443/api/recipes/get_recipes
 
 All other api endpoints can be built by adding similarly styled endpoints, and the full implentation of the gateway server does exactly this, adding endpoints for all the endpoints in the recipes service. 
+
+### Image Microservice Exemplar
+Author: Thanh Phan
+[Image Microservice Exemplar](../exemplars/images_service_exemplar/doc/README.md)
+
+#### Overview
+This service will return a list of image url based on the provided query
+
+It uses [Spoonacular](https://spoonacular.com/food-api) as source of image.
+
+Spoonacular only allow 100 free requests per day. Thus, I use mongoDB to save all the results. Thus, in the future, we will no longer rely on Spoonacular
