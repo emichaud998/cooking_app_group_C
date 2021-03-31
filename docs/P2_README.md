@@ -38,3 +38,13 @@ Author: Emily Michaud
 
 #### Overview
 This Exemplar shows how to communicate with each of the Recipes Microservice endpoints. The Recipes Microservice coordinates inserts, updates, deletes, and retrievals from the Recipes MongoDB collection. This file shows how to send/retrieve data from each of the Recipe Microservice endpoints. There are multiple functions used to show how to create a new recipe and send the recipe to the Recipe Microservice create_recipe endpoint, how to get one or many recipes from the Recipe Microservice, how to recieve a filtered list from the Recipe Microservice, how to update recipes stored in the Recipe Microservice DB, and how to delete recipes from the Recipe Microservice DB. This exemplar is very useful to show the basic structure that all team members should follow when communicating with the Recipe Microservice. Since the Recipe Microservice maintains all the recipe and ingredient information, it will most likely be the most frequently used service in our Recipe Application. Therefore, it is important that each team member understands each of the endpoints that the Recipe Microservice provides and how to send/retrieve data from each of these endpoints.
+
+### Nginx API Gateway Server
+Author: Andrew Leger
+
+insert link here
+
+### Overview
+The Nginx API server is a simple Nginx server run on a docker container, serving only one endpoint localhost:443/api/recipes/get_recipes
+
+All other api endpoints can be built by adding similarly styled endpoints, and the full implentation of the gateway server does exactly this, adding endpoints for all the endpoints in the recipes service. 
