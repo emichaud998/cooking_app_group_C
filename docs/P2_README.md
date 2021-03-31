@@ -27,8 +27,10 @@ Each microservice shown will handle important services needed by the application
 
 While this prototype design may change, this version 1 prototype architecture diagram shows the technologies our application will be using, and it shows how each individual microservice that makes up the application will communicate with one another.
 
-## Presentation Slides
+## Project Phase Presentation
 [Presentation Slides Link](https://docs.google.com/presentation/d/1ZAVOpoEdK-_AqgSSZVpYKRnEdNewYfDFvcJxdSQgusU/edit?usp=sharing)
+
+[Video Link]()
 
 ## Exemplars
 
