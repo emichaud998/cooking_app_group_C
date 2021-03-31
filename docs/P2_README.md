@@ -62,3 +62,11 @@ This service will return a list of image url based on the provided query
 It uses [Spoonacular](https://spoonacular.com/food-api) as source of image.
 
 Spoonacular only allow 100 free requests per day. Thus, I use mongoDB to save all the results. Thus, in the future, we will no longer rely on Spoonacular
+
+### Comments Microservice Exemplar
+Author: Duy Pham 
+[Image Microservice Exemplar](../services/Comments/doc/README.md)
+
+#### Overview
+This microservice is built for simple comments management system.
+It mainly support CRUD operation on Comment object.
