@@ -10,3 +10,12 @@ To start server:
     ```
 5. Access the recipes server, hosted on port 8091, through requests to the gateway server, currently on port 443
 6. Success. You can now access the recipes microservice as described in its README, but using port 443 instead.
+
+
+## Docs
+
+Directories: 
+
+    nginx-config: Contains all configuration files for running the server.
+    static_files: Currently unused, but meant for serving static files directly.
+    
