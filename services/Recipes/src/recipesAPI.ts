@@ -5,12 +5,14 @@ import { IRecipes, IIngredients, IRecipeSteps, RecipeCreate, RecipeFilter, Ingre
 
 const app = express();
 app.use(express.json());
-const PORT = 8091;
+const PORT= process.env.RECIPES_API_PORT || 8091;
 
 // Connect to mongodb database
-const uri = `mongodb://localhost/Recipes`
-//const uri = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@localhost:27017/${process.env.MONGO_DATABASE}`;
+const uri = `mongodb://mongodb:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}`;
+
 mongoose.connect(uri, {
+  user: `${process.env.MONGO_INITDB_USERNAME}`,
+  pass: `${process.env.MONGO_INITDB_PASSWORD}`,
   useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,
