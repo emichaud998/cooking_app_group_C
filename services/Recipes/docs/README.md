@@ -44,7 +44,7 @@ The Recipes MongoDB Service reads the following environment variables:
 4. To connect to the API using HTTP requests, look at which port in the range 8090-8099 the service is running on by running `docker-compose ps` and looking at the first port listed
 
 ### Recipes Collection Mock Data Population
-To populate a mock Recipes MongoDB collection with fake data, run `npm run populateMockDB`. This program will prompt the user to input the number of fake recipes they want to insert into the DB, and then it will create that many fake mock recipes and send each one to the Recipes Microservice's `/create_recipe` endpoint.
+To populate a mock Recipes MongoDB collection with fake data, run `npm run populateMockDB -- <Recipe Service Port Number>`, passing in the port number of the Recipe Docker service. This program will prompt the user to input the number of fake recipes they want to insert into the DB, and then it will create that many fake mock recipes and send each one to the Recipes Microservice's `/create_recipe` endpoint.
 
 ## Files
 
