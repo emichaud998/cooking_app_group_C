@@ -89,7 +89,6 @@ db.once("open", () => {
         res.json({ count: 0, shoppingList: shoppingList });
       }
     } catch (error: any) {
-      console.log(error);
       res.status(500);
       res.json({ error: "Internal server error" });
     }
@@ -115,13 +114,11 @@ db.once("open", () => {
     try {
       const shoppingList = await AddIngredientToList(id, user_id, ingredientAdd);
       if (shoppingList) {
-        console.log(shoppingList);
         res.json({ count: shoppingList.ingredient_list.length, shoppingList: shoppingList });
       } else {
         res.json({ count: 0, shoppingList: shoppingList });
       }
     } catch (error: any) {
-      console.log(error);
       res.status(500);
       res.json({ error: "Internal server error" });
     }
