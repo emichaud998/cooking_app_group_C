@@ -67,8 +67,8 @@ export interface RecipeFilter {
 
 // /Interface defining the structure of a recipe update request
 export interface RecipeUpdate{
-    id?: String,
-    name?: String
+    id?: string,
+    name?: string
     updates: RecipeCreate
 }
 

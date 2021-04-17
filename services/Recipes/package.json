@@ -11,7 +11,7 @@
     "start": "npm run build:live",
     "build": "tsc -p .",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/recipesAPI.ts",
-    "populateMockDB": "node ./lib/populateRecipeCollection.js"
+    "populateMockDB": "ts-node src/mockRecipeCollection/populateRecipeCollection.ts"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,9 @@
     "@types/express": "^4.17.11",
     "@types/mongoose": "^5.10.4",
     "@types/node": "^14.14.35",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.24.0",
     "express": "^4.17.1",
     "mongoose": "^5.12.2",
     "nodemon": "^2.0.7",
