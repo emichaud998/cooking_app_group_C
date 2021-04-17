@@ -19,18 +19,13 @@ export interface ShoppingListAddIngredient {
 
 // Interface defining the structure of a request to update an ingredient in a shopping list
 export interface ShoppingListUpdateIngredient{
+    user_id: string,
 	id: string,
     ingredient_id: string, 
 	amount: number, 
 	units: string, 
 	recipe_id?: string,
     ingredient_extra: boolean
-}
-
-// /Interface defining the structure of a shopping list ingredient update request
-export interface ShoppingListIngredientUpdate{
-    id: string,
-    updates: ShoppingListAddIngredient
 }
 
 // Interface defining the structure of the shopping list schema

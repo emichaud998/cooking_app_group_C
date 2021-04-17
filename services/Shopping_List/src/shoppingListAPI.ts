@@ -40,8 +40,8 @@ db.once("open", () => {
     const shopping_list_name = String(req.body.shopping_list_name);
 
     try {
-      await CreateNewShoppingList({user_id, shopping_list_name});
-      res.json({ message: "Created new shopping list for user" });
+      const shoppingList = await CreateNewShoppingList({user_id, shopping_list_name});
+      res.json({ message: "Created new shopping list for user",  shoppingList: shoppingList});
     } catch (error: any) {
       res.status(500);
       res.json({ error: "Internal server error" });
@@ -60,7 +60,7 @@ db.once("open", () => {
       if (shoppingList) {
         res.json({ count: shoppingList.length, shoppingList: shoppingList });
       } else {
-        res.json({ count: 0, shoppingList: shoppingList });
+        res.json({ count: 0, shoppingLists: shoppingList });
       }
     } catch (error: any) {
       res.status(500);
@@ -177,7 +177,7 @@ db.once("open", () => {
   });
 
   // Updates an ingredient in a user's a shopping list given shopping list ID
-  app.put("/api/shoppinglist/update_ingredient_amount", async (req, res) => {
+  app.put("/api/shoppinglist/update_shopping_list_ingredient", async (req, res) => {
     if (!req.body.id) {
       res.status(400);
       return res.json({ error: "Missing 'id' field" });
