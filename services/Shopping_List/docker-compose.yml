@@ -11,9 +11,9 @@ services:
       MONGO_INITDB_USERNAME: "${MONGO_INITDB_USERNAME}"
       MONGO_INITDB_PASSWORD: "${MONGO_INITDB_PASSWORD}"
     ports:
-      - 27017:27017
+      - 29040:27017
     volumes:
-      - shopping_mongodata:/data/db
+      - mongodata:/data/db
       - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
   api:
     build: .
@@ -26,4 +26,4 @@ services:
       MONGO_PORT: "${MONGO_PORT}"
       SHOPPING_LIST_API_PORT: "${SHOPPING_LIST_API_PORT}"
 volumes:
-  shopping_mongodata:
+  mongodata:
