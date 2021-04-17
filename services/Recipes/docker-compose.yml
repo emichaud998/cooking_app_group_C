@@ -1,9 +1,8 @@
 version: "3.7"
 
 services:
-  recipe-mongodb:
+  mongodb:
     image: mongo:latest
-    container_name: mongodb
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
@@ -16,7 +15,7 @@ services:
     volumes:
       - mongodata:/data/db
       - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
-  recipe_api:
+  api:
     build: .
     ports: 
       - 8090-8099:${RECIPES_API_PORT}
