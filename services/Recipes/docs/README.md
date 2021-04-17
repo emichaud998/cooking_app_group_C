@@ -1,4 +1,5 @@
 # Recipes Manager Microservice
+Author: Emily Michaud
 
 ## Overview
 The Recipes Manager is a service that coordinates inserts, updates, deletes, and retrievals from the Recipes MongoDB collection. The Recipes microservice maintains the MongoDB Recipes collection and supports the following operations with 10 HTTP REST API endpoints:
@@ -18,17 +19,29 @@ The Recipes Manager is a service that coordinates inserts, updates, deletes, and
     * Filter all recipes by meal type 
 
 ## Configuration
-The FHIR Endpoint Manager reads the following environment variables:
-
 **These variables must be set on your system in the provided .env folder**
 
-As of right now the Recipe microservice connects to MongoDB locally, but this will be updated to work with Docker and environmental variables will be required
+The Recipes Manager API reads the following environment variables:
+* MONGO_DATABASE: Name of the Shopping List database `default: Recipes`
+* MONGO_INITDB_USERNAME: Username to connect to the Shopping List database with `default: RecipesDB`
+* MONGO_INITDB_PASSWORD: Password to connect to the Shopping List database with `default: RecipesDB`
+* MONGO_PORT: Port Shopping List database is listening on `default: 27017 -> this port must be the default value unless you change the mongo service port in the docker compose file`
+* RECIPES_API_PORT: Internal port Shopping List API is listening on `default: 8080`
+
+The Recipes MongoDB Service reads the following environment variables:
+* MONGO_INITDB_ROOT_USERNAME: MongDB root admin username `default: admin`
+* MONGO_INITDB_ROOT_PASSWORD: MongDB root admin password `default: admin`
+* MONGO_DATABASE: Name of the Shopping List database `default: Recipes`
+* MONGO_INITDB_USERNAME: Username to connect to the Shopping List database with `default: RecipesDB`
+* MONGO_INITDB_PASSWORD: Password to connect to the Shopping List database with `default: RecipesDB`
+
 
 ## How to Run
 
-1. `cd` to the recipe service base directory folder
-2. run `npm install`
-3. run `npm start` to start the APIs server
+1. `cd` to the recipes service base directory folder
+2. Make sure the .env file contains all necessary env variables
+3. run `docker-compose up` to start the Recipes API service and MongoDB service
+4. To connect to the API using HTTP requests, look at which port in the range 8090-8099 the service is running on by running `docker-compose ps` and looking at the first port listed
 
 ### Recipes Collection Mock Data Population
 To populate a mock Recipes MongoDB collection with fake data, run `npm run populateMockDB`. This program will prompt the user to input the number of fake recipes they want to insert into the DB, and then it will create that many fake mock recipes and send each one to the Recipes Microservice's `/create_recipe` endpoint.

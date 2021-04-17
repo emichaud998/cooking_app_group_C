@@ -19,7 +19,7 @@ services:
   recipe_api:
     build: .
     ports: 
-      - "8091:8091"
+      - 8090-8099:${RECIPES_API_PORT}
     environment:
       MONGO_DATABASE: "${MONGO_DATABASE}"
       MONGO_INITDB_USERNAME: "${MONGO_INITDB_USERNAME}"
