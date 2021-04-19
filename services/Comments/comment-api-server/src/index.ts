@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import express from "express";
 import mongoose from "mongoose";
 import {
@@ -14,9 +11,9 @@ import {
 
 const app = express();
 app.use(express.json());
-const PORT = 8093;
+const PORT = 8000;
 
-const uri = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@localhost:27017/${process.env.MONGO_DATABASE}`;
+const uri = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@comment-service-mongodb:27017/${process.env.MONGO_DATABASE}`;
 mongoose.connect(uri, {
   useCreateIndex: true,
   useNewUrlParser: true,

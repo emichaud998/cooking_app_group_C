@@ -1,6 +1,18 @@
 version: "3.7"
 
 services:
+  comment-service-api-server:
+    build:
+      context: ./comment-api-server
+      dockerfile: Dockerfile
+    volumes:
+      - ./comment-api-server/src:/app/src
+    ports:
+      - 9020:8000
+    env_file:
+      - .env
+    restart: unless-stopped
+
   comment-service-mongodb:
     image: mongo:latest
     container_name: mongodb
@@ -13,7 +25,8 @@ services:
       MONGO_PASSWORD: "$MONGO_PASSWORD"
     env_file:
       - .env
-    ports:
-      - 27017:27017
+    expose:
+      - 27017
     volumes:
-      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
+      - ./scripts/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
+    restart: unless-stopped

@@ -1,4 +1,4 @@
-import { FilterQuery, CreateQuery, UpdateQuery, ObjectId } from "mongoose";
+import { FilterQuery, CreateQuery, UpdateQuery } from "mongoose";
 import Recipe, { IRecipes } from "./models/recipesModels";
 
 // Get recipe information for one recipe by ID from DB
@@ -55,10 +55,10 @@ export async function GetRecipesLimit(limit: number, skip:number): Promise<IReci
 
 // Get all ingredients names from DB
 export async function GetIngredients(): Promise<string[]> {
-  let ingredientArr: string[] = [];
+  const ingredientArr: string[] = [];
   await Recipe.distinct('ingredients.ingredient_name')
     .then((data: string[]) => {
-      for (let ingredient of data) {
+      for (const ingredient of data) {
         ingredientArr.push(ingredient);
       }
     })
@@ -68,7 +68,7 @@ export async function GetIngredients(): Promise<string[]> {
 
   return Recipe.distinct('ingredients_extra.ingredient_name')
   .then((data: string[]) => {
-    for (let ingredient of data) {
+    for (const ingredient of data) {
       if (!ingredientArr.includes(ingredient)) {
         ingredientArr.push(ingredient);
       }
@@ -158,13 +158,13 @@ export async function DeleteRecipeName({
 export async function FilterRecipes(
   filterQuery:  FilterQuery<IRecipes>, limit: number, skip: number
 ): Promise<IRecipes[]> {
-  let recipeAggr = []
+  const recipeAggr = [];
   
-  recipeAggr.push({ $match: { $and: filterQuery} })
-  recipeAggr.push({ $skip: skip })
+  recipeAggr.push({ $match: { $and: filterQuery} });
+  recipeAggr.push({ $skip: skip });
 
   if (limit > 0) {
-    recipeAggr.push({ $limit: limit })
+    recipeAggr.push({ $limit: limit });
   }
 
   return Recipe.aggregate(recipeAggr)
