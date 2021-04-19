@@ -101,7 +101,7 @@ export async function UpdateShoppingListIngredient(
   updateCommands: updateCommands): Promise<IShoppingList | null> {
   return ShoppingList.findOneAndUpdate(
     { "_id": id, "user_id": user_id, "ingredient_list._id": ingredient_id}, 
-    { "$set": filterQuery},
+    { "$set": updateCommands},
     { new: true }
   )
     .then((data: IShoppingList | null) => {
