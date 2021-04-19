@@ -2,11 +2,13 @@ import express from "express";
 import mongoose from "mongoose";
 import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesLimit, GetRecipesByName, FilterRecipes, UpdateRecipeID, UpdateRecipeName, GetIngredients } from "./crudOperations";
 import { IRecipes, IIngredients, IRecipeSteps, RecipeCreate, RecipeFilter, IngredientCreate } from "./models/recipesModels";
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
 const PORT= process.env.RECIPES_API_PORT || 8091;
 
+app.use(cors({ origin: '*' }));
 // Connect to mongodb database
 const uri = `mongodb://mongodb:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}`;
 

@@ -31,8 +31,10 @@
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
+    "@types/cors": "^2.8.10",
     "@types/faker": "^5.1.7",
     "axios": "^0.21.1",
+    "cors": "^2.8.5",
     "faker": "^5.5.0"
   }
 }
