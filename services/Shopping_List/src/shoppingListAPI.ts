@@ -193,9 +193,9 @@ db.once("open", () => {
     const id = String(req.body.id);
     const user_id = String(req.body.user_id);
     const ingredient_id = String(req.body.ingredient_id);
-    const filterQuery = createUpdateQuery(req.body);
+    const updateQuery = createUpdateQuery(req.body);
     try {
-      const shoppingList = await UpdateShoppingListIngredient(id, user_id, ingredient_id, filterQuery);
+      const shoppingList = await UpdateShoppingListIngredient(id, user_id, ingredient_id, updateQuery);
       if (shoppingList) {
         res.json({ count: shoppingList.ingredient_list.length, shoppingList: shoppingList });
       } else {
