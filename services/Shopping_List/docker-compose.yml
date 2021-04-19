@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  mongodb:
+    image: mongo:latest
+    restart: on-failure:5 
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_PASSWORD}"
+      MONGO_DATABASE: "${MONGO_DATABASE}"
+      MONGO_INITDB_USERNAME: "${MONGO_INITDB_USERNAME}"
+      MONGO_INITDB_PASSWORD: "${MONGO_INITDB_PASSWORD}"
+    ports:
+      - 29040:27017
+    volumes:
+      - mongodata:/data/db
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
+  api:
+    build: .
+    restart: on-failure:5 
+    ports: 
+      - 9040-9049:${SHOPPING_LIST_API_PORT}
+    environment:
+      MONGO_DATABASE: "${MONGO_DATABASE}"
+      MONGO_INITDB_USERNAME: "${MONGO_INITDB_USERNAME}"
+      MONGO_INITDB_PASSWORD: "${MONGO_INITDB_PASSWORD}"
+      MONGO_PORT: "${MONGO_PORT}"
+      SHOPPING_LIST_API_PORT: "${SHOPPING_LIST_API_PORT}"
+volumes:
+  mongodata:
