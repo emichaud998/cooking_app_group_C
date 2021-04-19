@@ -11,7 +11,7 @@ import {
 
 const app = express();
 app.use(express.json());
-const PORT = 8000;
+const PORT = 8093;
 
 const uri = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@comment-service-mongodb:27017/${process.env.MONGO_DATABASE}`;
 mongoose.connect(uri, {
