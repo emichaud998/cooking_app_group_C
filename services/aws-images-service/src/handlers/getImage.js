@@ -51,7 +51,7 @@ async function getImage(event, context) {
 
   imageUrls = imageUrls.data;
 
-  if (imageUrls.totalReults != 0) {
+  if (imageUrls.totalResults != 0) {
     const response = await axios.get(imageUrls.results[0].image, {
       responseType: "arraybuffer",
     });
