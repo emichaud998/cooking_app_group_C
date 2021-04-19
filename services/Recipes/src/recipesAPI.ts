@@ -2,13 +2,13 @@ import express from "express";
 import mongoose from "mongoose";
 import { CreateRecipe, DeleteRecipeID, DeleteRecipeName, GetRecipeByID, GetRecipes, GetRecipesLimit, GetRecipesByName, FilterRecipes, UpdateRecipeID, UpdateRecipeName, GetIngredients } from "./crudOperations";
 import { IRecipes, IIngredients, IRecipeSteps, RecipeCreate, RecipeFilter, IngredientCreate } from "./models/recipesModels";
-import cors from 'cors'
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
 const PORT= process.env.RECIPES_API_PORT || 8091;
 
-app.use(cors({ origin: '*' }))
+app.use(cors({ origin: '*' }));
 // Connect to mongodb database
 const uri = `mongodb://mongodb:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}`;
 
@@ -104,12 +104,12 @@ db.once("open", () => {
   // Creates a new recipe entry in DB
   app.post("/api/recipes/create_recipe", async (req, res) => {
     if (!req.body.name) {
-      res.status(400);
-      return res.json({ error: "Missing 'name' field" });
+        res.status(400);
+        return res.json({ error: "Missing 'name' field" });
     }
     if (!req.body.ingredients || req.body.ingredients.length <= 0) {
-      res.status(400);
-      return res.json({ error: "Missing 'ingredients' field or did not supply any ingredients" });
+        res.status(400);
+        return res.json({ error: "Missing 'ingredients' field or did not supply any ingredients" });
     }
 
     const newRecipe = formatRecipe(req.body);
@@ -157,10 +157,10 @@ db.once("open", () => {
               recipes = await GetRecipes(skip);
             }
         }
-      return res.json({ count: recipes.length, recipes: recipes });
+        return res.json({ count: recipes.length, recipes: recipes });
     } catch (error: any) {
-      res.status(500);
-      return res.json({ error: "Internal server error" });
+        res.status(500);
+        return res.json({ error: "Internal server error" });
     }
   });
 
@@ -172,8 +172,8 @@ db.once("open", () => {
     }
 
     if (!req.body.updates) {
-      res.status(400);
-      return res.json({ error: "Missing 'updates' field" });
+        res.status(400);
+        return res.json({ error: "Missing 'updates' field" });
     }
 
     const updates = formatRecipe(req.body.updates);
@@ -199,14 +199,14 @@ db.once("open", () => {
     }
 
     if (!req.body.updates) {
-      res.status(400);
-      return res.json({ error: "Missing 'updates' field" });
+        res.status(400);
+        return res.json({ error: "Missing 'updates' field" });
     }
 
     const updates = formatRecipe(req.body.updates);
     const name = String(req.body.name);
     try {
-      const recipe = await UpdateRecipeName({ name, updates });
+      const recipe = await UpdateRecipeName({ name,  updates});
       if (recipe === null) {
         return res.json({ message: "There is no recipe with given name or no update information supplied" });
       } else {
@@ -238,8 +238,8 @@ db.once("open", () => {
     }
   });
 
-  // Delete recipe associated with name param from DB
-  app.delete("/api/recipes/delete_recipe_by_name", async (req, res) => {
+// Delete recipe associated with name param from DB
+app.delete("/api/recipes/delete_recipe_by_name", async (req, res) => {
     if (!req.query.name) {
       res.status(400);
       return res.json({ error: "Missing 'name' field" });
@@ -258,7 +258,7 @@ db.once("open", () => {
     }
   });
 
-
+  
   app.listen(PORT, () => {
     console.log(`️[server]: Server is running at http://localhost:${PORT}`);
   });
@@ -268,41 +268,41 @@ db.once("open", () => {
 function formatRecipe(recipeObj: RecipeCreate) {
     const recipe = {} as IRecipes;
 
-  if (recipeObj.name) {
-    recipe.name = String(recipeObj.name);
-  }
+    if (recipeObj.name) {
+      recipe.name = String(recipeObj.name);
+    }
+    
+    if (recipeObj.description) {
+        recipe.description = String(recipeObj.description);
+    }
+    if (recipeObj.prep_time) {
+        recipe.prep_time = Number(String(recipeObj.prep_time));
+    } 
+    if (recipeObj.cook_time) {
+        recipe.cook_time = Number(String(recipeObj.cook_time));
+    }
+    if (recipeObj.servings) {
+        recipe.servings = Number(String(recipeObj.servings));
+    }
+    if (recipeObj.calories) {
+        recipe.calories = Number(String(recipeObj.calories));
+    }
+    formatYield(recipe, recipeObj);
 
-  if (recipeObj.description) {
-    recipe.description = String(recipeObj.description);
-  }
-  if (recipeObj.prep_time) {
-    recipe.prep_time = Number(String(recipeObj.prep_time));
-  }
-  if (recipeObj.cook_time) {
-    recipe.cook_time = Number(String(recipeObj.cook_time));
-  }
-  if (recipeObj.servings) {
-    recipe.servings = Number(String(recipeObj.servings));
-  }
-  if (recipeObj.calories) {
-    recipe.calories = Number(String(recipeObj.calories));
-  }
-  formatYield(recipe, recipeObj);
+    formatMealType(recipe, recipeObj);
+    formatDietaryCategories(recipe, recipeObj);
 
-  formatMealType(recipe, recipeObj);
-  formatDietaryCategories(recipe, recipeObj);
+    if (recipeObj.dish_type) {
+        recipe.dish_type = String(recipeObj.dish_type);
+    }
 
-  if (recipeObj.dish_type) {
-    recipe.dish_type = String(recipeObj.dish_type);
-  }
+    formatIngredientList(recipe, recipeObj);
+    formatIngredientExtraList(recipe, recipeObj);
 
-  formatIngredientList(recipe, recipeObj);
-  formatIngredientExtraList(recipe, recipeObj);
+    formatRecipeSteps(recipe, recipeObj);
 
-  formatRecipeSteps(recipe, recipeObj);
-
-  return recipe;
-}
+    return recipe;
+} 
 
 // Format yield nested field of recipe object using request information
 function formatYield(recipe: IRecipes, recipeObj: RecipeCreate) {
@@ -354,7 +354,6 @@ function formatDietaryCategories(recipe: IRecipes, recipeObj: RecipeCreate){
             recipe.dietary_categories[category] = true;
         }
     }
-  }
 }
 
 // Format ingredient list nested field of recipe object using request information
@@ -385,7 +384,6 @@ function formatIngredientList(recipe: IRecipes, recipeObj: RecipeCreate){
             recipe.ingredients =  ingredientList as [IIngredients];
         }
     }
-  }
 }
 
 // Format ingredient list nested field of recipe object using request information
@@ -482,22 +480,14 @@ function createFilterQuery(filterObj: RecipeFilter) {
     }else if (filterObj.filter_ingredient_only && filterObj.filter_ingredient_only.length > 0) {
         ingredientIncludeQuery =  {$expr:{$setIsSubset:["$ingredients.ingredient_name",filterObj.filter_ingredient_only]}},{_id:0};
 
-  // Create ingredient filter list that either checks if a recipe's ingredient list contains at least one of the filtering ingredients, 
-  // or if a recipe's ingredient list contains all of the filtering ingredients
-  if (filterObj.filter_ingredient_contains && filterObj.filter_ingredient_contains.length > 0) {
-    ingredientIncludeQuery = { $or: [{ "ingredients.ingredient_name": { $in: filterObj.filter_ingredient_contains } }, { "ingredients_extra.ingredient_name": { $in: filterObj.filter_ingredient_contains } }] }
-    filterQuery.push(ingredientIncludeQuery);
-  } else if (filterObj.filter_ingredient_only && filterObj.filter_ingredient_only.length > 0) {
-    ingredientIncludeQuery = { $expr: { $setIsSubset: ["$ingredients.ingredient_name", filterObj.filter_ingredient_only] } }, { _id: 0 };
+        filterQuery.push(ingredientIncludeQuery);
+    }
 
-    filterQuery.push(ingredientIncludeQuery);
-  }
+    // Create ingredient filter list that checks if a recipe's ingredient list does not contain any of the filtering ingredients
+    if (filterObj.filter_ingredient_exclude && filterObj.filter_ingredient_exclude.length > 0) {
+        ingredientExcludeQuery = { "ingredients.ingredient_name": { $nin:  filterObj.filter_ingredient_exclude} };
+        filterQuery.push(ingredientExcludeQuery);
+    }
 
-  // Create ingredient filter list that checks if a recipe's ingredient list does not contain any of the filtering ingredients
-  if (filterObj.filter_ingredient_exclude && filterObj.filter_ingredient_exclude.length > 0) {
-    ingredientExcludeQuery = { "ingredients.ingredient_name": { $nin: filterObj.filter_ingredient_exclude } };
-    filterQuery.push(ingredientExcludeQuery);
-  }
-
-  return filterQuery;
+    return filterQuery;
 }
