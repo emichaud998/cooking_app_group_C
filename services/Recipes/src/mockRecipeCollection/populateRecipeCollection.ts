@@ -1,35 +1,38 @@
-var faker = require('faker');
+const faker = require('faker');
 import axios from 'axios';
-const url = 'http://localhost:443';
+import { exit } from 'process';
 import * as readline from 'readline';
 
-const dietary_categories = ["low_sodium", "low_fat", "low_carb", "gluten_free", "dairy_free", "nut_free", "low_sugar", "low_calories", "all_natural", "vegetarian", "vegan", "healthy"]
-const meal_type = ["breakfast", "lunch", "dinner", "snack", "appetizer", "side_dish", "dessert"]
+const dietary_categories = ["low_sodium", "low_fat", "low_carb", "gluten_free", "dairy_free", "nut_free", "low_sugar", "low_calories", "all_natural", "vegetarian", "vegan", "healthy"];
+const meal_type = ["breakfast", "lunch", "dinner", "snack", "appetizer", "side_dish", "dessert"];
 
 let totalRecipes = 0;
 
+const PORT = process.argv.slice(2);
+const url = `http://localhost:${PORT}`;
+
 async function recipeMockData() {
     // Number of fake recipes to create entered from console
-    var rl = readline.createInterface({
+    const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout
     });
     
-    await rl.question("Enter total number of fake recipes to create: ", function(answer) {
+    await rl.question("Enter total number of fake recipes to create: ", async function(answer) {
         try {
-            totalRecipes = Number(answer)
+            totalRecipes = Number(answer);
             if (totalRecipes <= 0) {
                 throw new Error("Must provide a number greater than 0");
             } else {
-                populateRecipes();
+                await populateRecipes();
+                exit();
             }
         } catch(err) {
-            console.log(err)
+            console.log(err);
             throw new Error("Must provide a valid number");
         }
     rl.close();
     });
-
 }
 
 // Interface defining the structure of a recipe creation request
@@ -60,7 +63,7 @@ interface IngredientCreate {
 
 async function populateRecipes() {
     for (let recipes = 1; recipes <=totalRecipes; recipes++) {
-        let newRecipe = {} as RecipeCreate
+        const newRecipe = {} as RecipeCreate;
 
         newRecipe.name = faker.commerce.productName();
         newRecipe.description = faker.commerce.productDescription();
@@ -76,13 +79,13 @@ async function populateRecipes() {
         let index = faker.datatype.number({'min': 1, 'max': 4});
         newRecipe.recipe_steps = [];
         for (let i = 1; i <= index; i++) {
-            newRecipe.recipe_steps.push(faker.lorem.paragraph(faker.datatype.number({'min': 1, 'max': 3})))
+            newRecipe.recipe_steps.push(faker.lorem.paragraph(faker.datatype.number({'min': 1, 'max': 3})));
         }
 
         index = faker.datatype.number({'min': 1, 'max': 4});
-        let ingredientsList: IngredientCreate[] = [];
+        const ingredientsList: IngredientCreate[] = [];
         for (let i = 1; i <= index; i++) {
-            let newIngredient = {} as IngredientCreate;
+            const newIngredient = {} as IngredientCreate;
             newIngredient.ingredient_name = faker.commerce.productMaterial();
             newIngredient.measurement_amount = faker.datatype.number({'min': 1, 'max': 10});
             newIngredient.measurement_unit = faker.random.word();
@@ -93,9 +96,9 @@ async function populateRecipes() {
 
         index = faker.datatype.number({'min': 0, 'max': 4});
         if (index > 0) {
-            let ingredientsExtraList: IngredientCreate[] = [];
+            const ingredientsExtraList: IngredientCreate[] = [];
             for (let i = 1; i <= index; i++) {
-                let newIngredient = {} as IngredientCreate;
+                const newIngredient = {} as IngredientCreate;
                 newIngredient.ingredient_name = faker.commerce.productMaterial();
                 newIngredient.measurement_amount = faker.datatype.number({'min': 1, 'max': 10});
                 newIngredient.measurement_unit = faker.random.word();
@@ -107,15 +110,15 @@ async function populateRecipes() {
         }
 
         // Send fake recipe to Recipe microservice creation endpoint
-        let postURL = url+'/api/recipes/create_recipe';
+        const postURL = url+'/api/recipes/create_recipe';
         try {
-            await axios.post(postURL, newRecipe)
+            await axios.post(postURL, newRecipe);
             console.log("Added " + recipes.toString() + "/" + totalRecipes.toString()+ " Recipes!");
             // Add small delay between requests
             await delay(100);
 
         } catch(error) {
-            console.log("Error adding recipe to DB")
+            console.log("Error adding recipe to DB");
         }
     }
 }
