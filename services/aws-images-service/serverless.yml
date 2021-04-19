@@ -1,0 +1,52 @@
+service:
+  name: aws-images-service
+
+disabledDeprecations:
+  - "*"
+
+plugins:
+  - serverless-bundle
+  - serverless-pseudo-parameters
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-1
+  environment:
+    IMAGES_TABLE_NAME: ${self:custom.ImagesTable.name}
+    IMAGES_BUCKET_NAME: ${self:custom.ImagesBucket.name}
+    SPOONACULAR_API_KEY: d15b665fde884a7fb0285218e7e5f751
+  iamRoleStatements:
+    - ${file(iam/ImagesTableIAM.yml):ImagesTableIAM}
+    - ${file(iam/ImagesBucketIAM.yml):ImagesBucketIAM}
+
+resources:
+  Resources:
+    ImagesTable: ${file(resources/ImagesTable.yml):ImagesTable}
+    ImagesBucket: ${file(resources/ImagesBucket.yml):ImagesBucket}
+    ImagesBucketPolicy: ${file(resources/ImagesBucket.yml):ImagesBucketPolicy}
+
+functions:
+  getImage:
+    handler: src/handlers/getImage.handler
+    events:
+      - http:
+          method: GET
+          path: /getImage
+
+  uploadImage:
+    handler: src/handlers/uploadImage.handler
+    events:
+      - http:
+          method: PATCH
+          path: /uploadImage
+custom:
+  ImagesTable:
+    name: !Ref ImagesTable
+    arn: !GetAtt ImagesTable.Arn
+  ImagesBucket:
+    name: images-bucket-cs497s
+  bundle:
+    linting: false
