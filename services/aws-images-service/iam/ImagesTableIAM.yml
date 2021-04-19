@@ -1,0 +1,8 @@
+ImagesTableIAM:
+  Effect: Allow
+  Action:
+    - dynamodb:PutItem
+    - dynamodb:Scan
+    - dynamodb:getItem
+  Resource:
+    - ${self:custom.ImagesTable.arn}

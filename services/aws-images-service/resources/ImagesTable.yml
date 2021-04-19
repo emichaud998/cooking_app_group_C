@@ -1,0 +1,11 @@
+ImagesTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: ImagesTable
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions:
+      - AttributeName: name
+        AttributeType: S
+    KeySchema:
+      - AttributeName: name
+        KeyType: HASH
