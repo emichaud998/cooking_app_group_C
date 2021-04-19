@@ -28,7 +28,7 @@ export interface ShoppingListUpdateIngredient{
     ingredient_extra: boolean
 }
 
-export interface FilteringQuery{
+export interface updateCommands{
     "ingredient_list.$.ingredient_measurement.measurement_amount"?: number,
     "ingredient_list.$.ingredient_measurement.measurement_unit"?: string,
     "ingredient_list.$.recipe_id"?: string,
