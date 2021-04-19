@@ -2,7 +2,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import { GetShoppingListByID, GetShoppingListsByUserID, AddIngredientToList, DeleteIngredientFromList, CreateNewShoppingList, UpdateShoppingListIngredient, DeleteShoppingList } from "./crudOperations";
-import { IIngredientsList, ShoppingListAddIngredient, ShoppingListUpdateIngredient } from "./models/shoppingListModels";
+import { updateCommands, IIngredientsList, ShoppingListAddIngredient, ShoppingListUpdateIngredient } from "./models/shoppingListModels";
 
 const app = express();
 app.use(express.json());
@@ -193,9 +193,9 @@ db.once("open", () => {
     const id = String(req.body.id);
     const user_id = String(req.body.user_id);
     const ingredient_id = String(req.body.ingredient_id);
-    const filterQuery = createUpdateQuery(req.body);
+    const updateQuery = createUpdateQuery(req.body);
     try {
-      const shoppingList = await UpdateShoppingListIngredient({id, user_id, ingredient_id, filterQuery});
+      const shoppingList = await UpdateShoppingListIngredient(id, user_id, ingredient_id, updateQuery);
       if (shoppingList) {
         res.json({ count: shoppingList.ingredient_list.length, shoppingList: shoppingList });
       } else {
@@ -215,7 +215,7 @@ db.once("open", () => {
 
 // Creates a formatted update query to update an ingredient's measurement amount, measurement unit, recipe_id, and/or ingredient_extra boolean
 function createUpdateQuery(ingredientUpdates: ShoppingListUpdateIngredient) {
-  const filterQuery = {} as any;
+  const filterQuery = {} as updateCommands;
   if (ingredientUpdates.amount) {
     filterQuery["ingredient_list.$.ingredient_measurement.measurement_amount"] = ingredientUpdates.amount;
   }

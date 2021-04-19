@@ -28,6 +28,13 @@ export interface ShoppingListUpdateIngredient{
     ingredient_extra: boolean
 }
 
+export interface updateCommands{
+    "ingredient_list.$.ingredient_measurement.measurement_amount"?: number,
+    "ingredient_list.$.ingredient_measurement.measurement_unit"?: string,
+    "ingredient_list.$.recipe_id"?: string,
+    "ingredient_list.$.ingredient_extra"?: boolean
+}
+
 // Interface defining the structure of the shopping list schema
 export interface IShoppingList extends Document {
     user_id?: string,

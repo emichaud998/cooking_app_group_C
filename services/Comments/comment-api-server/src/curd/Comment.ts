@@ -55,10 +55,13 @@ export async function CreateComment(
     });
 }
 
-export async function UpdateCommentById({
-  id,
-  update,
-}: UpdateQuery<IComment>): Promise<IComment | null> {
+export async function UpdateCommentById(
+  id: String,
+  userId: String,
+  postId: String,
+  commentText: String
+): Promise<IComment | null> {
+  const update = new Comment({ userId, postId, commentText });
   return Comment.findOneAndUpdate({ _id: id }, update, { new: true })
     .then((data: IComment | null) => {
       return data;
