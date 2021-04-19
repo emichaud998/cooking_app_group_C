@@ -1,4 +1,4 @@
-import { FilterQuery, CreateQuery, UpdateQuery } from "mongoose";
+import { FilterQuery, CreateQuery } from "mongoose";
 import Recipe, { IRecipes } from "./models/recipesModels";
 
 // Get recipe information for one recipe by ID from DB
@@ -93,10 +93,7 @@ export async function CreateRecipe(
 }
 
 // Update a recipe with given ID with new update information
-export async function UpdateRecipeID({
-  id,
-  updates,
-}: UpdateQuery<IRecipes>): Promise<IRecipes | null> {
+export async function UpdateRecipeID(id: string, updates: IRecipes): Promise<IRecipes | null> {
   return Recipe.findOneAndUpdate(
     { _id: id },
     updates,
@@ -111,10 +108,7 @@ export async function UpdateRecipeID({
 }
 
 // Update a recipe with given exact name with new update information
-export async function UpdateRecipeName({
-  name,
-  updates,
-}: UpdateQuery<IRecipes>): Promise<IRecipes | null> {
+export async function UpdateRecipeName(name: string, updates: IRecipes): Promise<IRecipes | null> {
   return Recipe.findOneAndUpdate(
     { name: name },
     updates,

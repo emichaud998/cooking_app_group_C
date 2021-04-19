@@ -1,5 +1,5 @@
-import { FilterQuery, UpdateQuery } from "mongoose";
-import ShoppingList, { IIngredientsList, IShoppingList } from "./models/shoppingListModels";
+import { FilterQuery } from "mongoose";
+import ShoppingList, { IIngredientsList, IShoppingList, FilteringQuery } from "./models/shoppingListModels";
 
 // Get all shopping list information for a user by their user id
 export async function GetShoppingListsByUserID({
@@ -94,12 +94,11 @@ export async function DeleteIngredientFromList({
 }
 
 // Update an ingredient with given ingredient ID in a user's shopping list with new ingredient update information
-export async function UpdateShoppingListIngredient({
-  id,
-  user_id,
-  ingredient_id,
-  filterQuery
-}: UpdateQuery<IShoppingList>): Promise<IShoppingList | null> {
+export async function UpdateShoppingListIngredient(
+  id: string,
+  user_id: string,
+  ingredient_id: string,
+  filterQuery: FilteringQuery): Promise<IShoppingList | null> {
   return ShoppingList.findOneAndUpdate(
     { "_id": id, "user_id": user_id, "ingredient_list._id": ingredient_id}, 
     { "$set": filterQuery},

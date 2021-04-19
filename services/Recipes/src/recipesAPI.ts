@@ -177,7 +177,7 @@ db.once("open", () => {
     const updates = formatRecipe(req.body.updates);
     const id = String(req.body.id);
     try {
-      const recipe = await UpdateRecipeID({ id,  updates});
+      const recipe = await UpdateRecipeID(id,  updates);
       if (recipe === null) {
         return res.json({ message: "There is no recipe with given id or no update information supplied" });
       } else {
@@ -204,7 +204,7 @@ db.once("open", () => {
     const updates = formatRecipe(req.body.updates);
     const name = String(req.body.name);
     try {
-      const recipe = await UpdateRecipeName({ name,  updates});
+      const recipe = await UpdateRecipeName(name,  updates);
       if (recipe === null) {
         return res.json({ message: "There is no recipe with given name or no update information supplied" });
       } else {
