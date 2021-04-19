@@ -143,15 +143,7 @@ db.once("open", () => {
     const postId = String(req.body.postId);
     const commentText = String(req.body.commentText);
     try {
-      let update = {
-        userId: userId,
-        postId: postId,
-        commentText: commentText,
-      };
-      const comment = await UpdateCommentById({
-        id,
-        update,
-      });
+      const comment = await UpdateCommentById(id, userId, postId, commentText);
       return res.json({ message: "Comment updated", comment: comment });
     } catch (error: any) {
       res.status(500);
