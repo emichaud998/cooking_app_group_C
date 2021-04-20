@@ -22,7 +22,7 @@ While the application is not entirely complete yet, this system design will allo
 Our application contains the following Microservices:
 * [Nginx API Gateway Service](../services/nginx_gateway_with_docker)- Andrew Leger 
 * [Front End](../services/frontend)- Andrew Leger
-* [Recipes Service](../services/Recipes/README.md) - Emily Michaud 
-* [Shopping List Service](../services/Shopping_List/README.md) - Emily Michaud 
-* [Comments Service](../services/Comments/README.md)- Duy Pham
-* [Images Service](../services/images_service/README.md)- Thanh Phan
+* [Recipes Service](../services/Recipes) - Emily Michaud 
+* [Shopping List Service](../services/Shopping_List) - Emily Michaud 
+* [Comments Service](../services/Comments)- Duy Pham
+* [Images Service](../services/images_service)- Thanh Phan
