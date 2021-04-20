@@ -32,4 +32,4 @@ done
 cd ..
 
 cd ./nginx_gateway_with_docker
-docker compose up
+docker-compose up
