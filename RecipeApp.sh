@@ -29,3 +29,7 @@ do
     docker-compose up --scale api=$x -d;
     x=$(( $x + 1 ));
 done
+cd ..
+
+cd ./nginx_gateway_with_docker
+docker compose up
