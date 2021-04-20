@@ -4,7 +4,7 @@ Our project idea is to create a cooking recipe application using microservices t
 
 # To Run:
 1. Create .env files for Recipes, Shopping List, and Comments services following configuration setup instructions in service README files
-2. In `RecipeApp.sh`, change variables RECIPE, SHOPPING_LIST, and COMMENTS at the top of the file to reflect the number of instances you want to run for each service. Default is set to 1.
+2. In `RecipeApp.sh`, change variables RECIPE, SHOPPING_LIST, and COMMENTS at the top of the file to reflect the number of instances you want to run for each service. Default is set to 1, can go up to 10.
 3. In project root directory, run `sh RecipeApp.sh`
 
 # Exemplars
