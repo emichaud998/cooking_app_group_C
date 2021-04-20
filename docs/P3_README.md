@@ -17,6 +17,10 @@ Each microservice shown handles important services needed by the application. Th
 
 While the application is not entirely complete yet, this system design will allow us to easily scale our application in order to provide higher availability to an increasing user base, and to provide more resistance to failure. 
 
+## Demo Video
+This Demo Video demonstrates our system up to the submission time. We explain the requirements for getting the system up and running and how to run it and send requests to all the services. Unfortunately, we had an issue where POSTMAN refreshed and changed our POST request to the create comment endpoint to a GET request, and so we have a section of our video where we end up skipping over that endpoing due to thinking it was some error, but in reality the endpoint does work when sending a POST request. 
+
+[Video Link](https://www.youtube.com/watch?v=DGiuo1OpkMU)
 
 ## Microservices 
 Our application contains the following Microservices:
