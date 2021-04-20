@@ -1,8 +1,8 @@
 #!/bin/bash
 
-RECIPE=1
-SHOPPING_LIST=1
-COMMENTS=1
+RECIPE=10
+SHOPPING_LIST=10
+COMMENTS=10
 
 cd ./services/Recipes
 x=1
@@ -26,7 +26,7 @@ cd ./Comments
 x=1
 while [ $x -le $COMMENTS ]
 do
-    docker-compose up --scale api=$x -d;
+    docker-compose up --scale comment-service-api-server=$x -d;
     x=$(( $x + 1 ));
 done
 cd ..
