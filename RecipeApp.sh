@@ -1,8 +1,8 @@
 #!/bin/bash
 
-RECIPE=10
-SHOPPING_LIST=10
-COMMENTS=10
+RECIPE=1
+SHOPPING_LIST=1
+COMMENTS=1
 
 cd ./services/Recipes
 x=1
