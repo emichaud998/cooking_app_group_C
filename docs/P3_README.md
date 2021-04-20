@@ -25,4 +25,4 @@ Our application contains the following Microservices:
 * [Recipes Service](../services/Recipes) - Emily Michaud 
 * [Shopping List Service](../services/Shopping_List) - Emily Michaud 
 * [Comments Service](../services/Comments)- Duy Pham
-* [Images Service](../services/images_service)- Thanh Phan
+* [Images Service](../services/aws-images-service)- Thanh Phan
