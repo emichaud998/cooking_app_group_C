@@ -1,0 +1,31 @@
+#!/bin/bash
+
+RECIPE=1
+SHOPPING_LIST=1
+COMMENTS=1
+
+cd ./services/Recipes
+x=1
+while [ $x -le $RECIPE ]
+do
+    docker-compose up --scale api=$x -d;
+    x=$(( $x + 1 ));
+done
+cd ..
+
+cd ./Shopping_List
+x=1
+while [ $x -le $SHOPPING_LIST ]
+do
+    docker-compose up --scale api=$x -d;
+    x=$(( $x + 1 ));
+done
+cd ..
+
+cd ./Comments
+x=1
+while [ $x -le $COMMENTS ]
+do
+    docker-compose up --scale api=$x -d;
+    x=$(( $x + 1 ));
+done
