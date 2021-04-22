@@ -67,9 +67,12 @@ https://7020556o0k.execute-api.eu-west-1.amazonaws.com/dev/uploadImage?query=ram
 
 Example body:
 
+I recommend use this website to encode your image, copy the result and paste it to the body:
+![](https://images-bucket-cs497s.s3.eu-west-1.amazonaws.com/howtouse.jpg)
 ```
 base64 encode of the image
 ```
+
 
 Example response:
 
