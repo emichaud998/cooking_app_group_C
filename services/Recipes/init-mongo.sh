@@ -8,4 +8,5 @@ mongo -- "$MONGO_DATABASE" <<EOF
     var passwd = '$MONGO_INITDB_PASSWORD';
     var database = '$MONGO_DATABASE';
     db.createUser({user: user, pwd: passwd, roles: [{role: "readWrite", db: database}]});
+    rs.secondaryOk();
 EOF
