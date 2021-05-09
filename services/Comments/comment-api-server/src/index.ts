@@ -10,10 +10,23 @@ import {
 } from "./curd/Comment";
 
 const app = express();
+
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
+}
+
+let num = 0;
+let logger = function (req: any, res: any, next: any) {
+  num++;
+  console.log(`Total request: ${num}`);
+  next();
+};
+
+app.use(logger);
 app.use(express.json());
 const PORT = 8000;
 
-const uri = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@comment-service-mongodb:27017/${process.env.MONGO_DATABASE}`;
+const uri = `mongodb://mongo1:27017,mongo2:27017,mongo3:27017,mongo4:27017,mongo5:27017/${process.env.MONGO_DATABASE}?replicaSet=comment_replica&readPreference=nearest`;
 mongoose.connect(uri, {
   useCreateIndex: true,
   useNewUrlParser: true,

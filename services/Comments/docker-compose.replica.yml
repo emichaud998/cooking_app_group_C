@@ -1,0 +1,104 @@
+version: "3.7"
+
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - comment-service-api-server
+    ports:
+      - "9020:9020"
+
+  comment-service-api-server:
+    build:
+      context: ./comment-api-server
+      dockerfile: Dockerfile
+    volumes:
+      - ./comment-api-server/src:/app/src
+    expose:
+      - "8000"
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+      - mongo4
+      - mongo5
+      - mongosetup
+
+  mongo1:
+    hostname: mongo1
+    container_name: mongo1
+    image: mongo:latest
+    expose:
+      - 27017
+    restart: always
+    volumes:
+      - mongo1:/data/db
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "comment_replica" ]
+  mongo2:
+    hostname: mongo2
+    container_name: mongo2
+    image: mongo:latest
+    expose:
+      - 27017
+    restart: always
+    volumes:
+      - mongo2:/data/db
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "comment_replica" ]
+  mongo3:
+    hostname: mongo3
+    container_name: mongo3
+    image: mongo:latest
+    expose:
+      - 27017
+    restart: always
+    volumes:
+      - mongo3:/data/db
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "comment_replica" ]
+  mongo4:
+    hostname: mongo4
+    container_name: mongo4
+    image: mongo:latest
+    expose:
+      - 27017
+    restart: always
+    volumes:
+      - mongo3:/data/db
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "comment_replica" ]
+  mongo5:
+    hostname: mongo5
+    container_name: mongo5
+    image: mongo:latest
+    expose:
+      - 27017
+    restart: always
+    volumes:
+      - mongo3:/data/db
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "comment_replica" ]
+  mongosetup:
+    image: mongo:latest
+    links:
+      - mongo1:mongo1
+      - mongo2:mongo2
+      - mongo3:mongo3
+      - mongo4:mongo4
+      - mongo5:mongo5
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+      - mongo4
+      - mongo5
+    volumes:
+      - ./scripts/mongo_setup.sh:/scripts/mongo_setup.sh:ro
+    restart: "no"
+    entrypoint: [ "bash", "/scripts/mongo_setup.sh" ]
+
+volumes:
+  mongo1:
+  mongo2:
+  mongo3:
