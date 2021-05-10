@@ -17,7 +17,6 @@ services:
       - mongosetup
   mongo1:
     hostname: mongo1
-    container_name: mongo1
     image: mongo:latest
     expose:
       - 27017
@@ -27,7 +26,6 @@ services:
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "recipe_replica" ]
   mongo2:
     hostname: mongo2
-    container_name: mongo2
     image: mongo:latest
     expose:
       - 27017
@@ -37,7 +35,6 @@ services:
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "recipe_replica" ]
   mongo3:
     hostname: mongo3
-    container_name: mongo3
     image: mongo:latest
     expose:
       - 27017

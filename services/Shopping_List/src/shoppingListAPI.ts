@@ -9,12 +9,9 @@ app.use(express.json());
 const PORT = process.env.SHOPPING_LIST_API_PORT || 8095;
 
 // Connect to mongodb database
-//const uri = `mongodb://localhost/ShoppingLists`;
-const uri = `mongodb://shopping_list_mongodb_1:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}`;
+const uri = `mongodb://mongo1:${process.env.MONGO_PORT},mongo2:${process.env.MONGO_PORT},mongo3:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}?replicaSet=recipe_replica&readPreference=nearest`;
 
 mongoose.connect(uri, {
-  user: `${process.env.MONGO_INITDB_USERNAME}`,
-  pass: `${process.env.MONGO_INITDB_PASSWORD}`,
   useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,
