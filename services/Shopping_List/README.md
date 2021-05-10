@@ -18,17 +18,9 @@ The Shopping List Manager is a service that coordinates creation, inserts, updat
 
 The Shopping List Manager reads the following environment variables:
 * MONGO_DATABASE: Name of the Shopping List database `default: Shopping_Lists`
-* MONGO_INITDB_USERNAME: Username to connect to the Shopping List database with `default: ShoppingListDB`
-* MONGO_INITDB_PASSWORD: Password to connect to the Shopping List database with `default: ShoppingListDB`
 * MONGO_PORT: Port Shopping List database is listening on `default: 27017 -> this port must be the default value unless you change the mongo service port in the docker compose file`
 * SHOPPING_LIST_API_PORT: Internal port Shopping List API is listening on `default: 8080`
 
-The Shopping List MongoDB Service reads the following environment variables:
-* MONGO_INITDB_ROOT_USERNAME: MongDB root admin username `default: admin`
-* MONGO_INITDB_ROOT_PASSWORD: MongDB root admin password `default: admin`
-* MONGO_DATABASE: Name of the Shopping List database `default: Shopping_Lists`
-* MONGO_INITDB_USERNAME: Username to connect to the Shopping List database with `default: ShoppingListDB`
-* MONGO_INITDB_PASSWORD: Password to connect to the Shopping List database with `default: ShoppingListDB`
 
 ## How to Run
 

@@ -10,11 +10,9 @@ const PORT= process.env.RECIPES_API_PORT || 8091;
 
 app.use(cors({ origin: '*' }));
 // Connect to mongodb database
-const uri = `mongodb://mongodb:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}`;
+const uri = `mongodb://mongo1:${process.env.MONGO_PORT},mongo2:${process.env.MONGO_PORT},mongo3:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE}?replicaSet=recipe_replica&readPreference=nearest`;
 
 mongoose.connect(uri, {
-  user: `${process.env.MONGO_INITDB_USERNAME}`,
-  pass: `${process.env.MONGO_INITDB_PASSWORD}`,
   useCreateIndex: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,

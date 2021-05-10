@@ -23,17 +23,8 @@ The Recipes Manager is a service that coordinates inserts, updates, deletes, and
 
 The Recipes Manager API reads the following environment variables:
 * MONGO_DATABASE: Name of the Shopping List database `default: Recipes`
-* MONGO_INITDB_USERNAME: Username to connect to the Shopping List database with `default: RecipesDB`
-* MONGO_INITDB_PASSWORD: Password to connect to the Shopping List database with `default: RecipesDB`
 * MONGO_PORT: Port Shopping List database is listening on `default: 27017 -> this port must be the default value unless you change the mongo service port in the docker compose file`
 * RECIPES_API_PORT: Internal port Shopping List API is listening on `default: 8080`
-
-The Recipes MongoDB Service reads the following environment variables:
-* MONGO_INITDB_ROOT_USERNAME: MongDB root admin username `default: admin`
-* MONGO_INITDB_ROOT_PASSWORD: MongDB root admin password `default: admin`
-* MONGO_DATABASE: Name of the Shopping List database `default: Recipes`
-* MONGO_INITDB_USERNAME: Username to connect to the Shopping List database with `default: RecipesDB`
-* MONGO_INITDB_PASSWORD: Password to connect to the Shopping List database with `default: RecipesDB`
 
 
 ## How to Run
