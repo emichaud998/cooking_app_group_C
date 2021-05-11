@@ -12,8 +12,8 @@ The Recipes Manager is a service that coordinates inserts, updates, deletes, and
 6. Update a recipe entry information associated with either an ID or exact name
 7. Delete a recipe entry associated with either an ID or exact name from Recipes collection
 8. Filter Recipes by one or more of the following (can limit this filtered list or skip over entries):
-    * Filter all recipes that includes at least one requested ingredient from list
-    * Filter all recipes that only include requested ingredients from list
+    * Filter all recipes that include the requested ingredients from list
+    * Filter all recipes that ONLY include requested ingredients from list
     * Filter all recipes that do not include any requested ingredients from list
     * Filter all recipes by dietary category
     * Filter all recipes by meal type 
@@ -177,7 +177,7 @@ const RecipeStepsSchema: Schema  = new Schema({
 ```typescript
     "filter_category": string[], // Find recipes who has these listed categories set to true
     "filter_meal_type": string[], // Find recipes who has one of these listed meal types set to true
-	"filter_ingredient_contains": string[], // Find recipes who contain at least one of these listed ingredients
+	"filter_ingredient_contains": string[], // Find recipes who contain these listed ingredients
 	"filter_ingredient_only": string[], // Find recipes who contain all of these listed ingredients
 	"filter_ingredient_exclude": string[] // Find recipes who do not contain any of these listed ingredients
 ```
@@ -1113,7 +1113,7 @@ Example Request Body:
 {
     "filter_category": [],
     "filter_meal_type": ["lunch"], 
-	"filter_ingredient_contains": ["butter", "flour", "almonds"],
+	"filter_ingredient_contains": ["butter", "flour"],
 	"filter_ingredient_only": [],
 	"filter_ingredient_exclude": ["vanilla extract"]
 }
