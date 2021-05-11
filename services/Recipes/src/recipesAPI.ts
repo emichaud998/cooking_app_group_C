@@ -473,7 +473,7 @@ function createFilterQuery(filterObj: RecipeFilter) {
     // Create ingredient filter list that either checks if a recipe's ingredient list contains at least one of the filtering ingredients, 
     // or if a recipe's ingredient list contains all of the filtering ingredients
     if (filterObj.filter_ingredient_contains && filterObj.filter_ingredient_contains.length > 0) {
-        ingredientIncludeQuery = {$or:[{"ingredients.ingredient_name": { $in:  filterObj.filter_ingredient_contains}}, {"ingredients_extra.ingredient_name": { $in:  filterObj.filter_ingredient_contains} }]};
+        ingredientIncludeQuery = {$or:[{"ingredients.ingredient_name": { $all:  filterObj.filter_ingredient_contains}}, {"ingredients_extra.ingredient_name": { $all:  filterObj.filter_ingredient_contains} }]};
         filterQuery.push(ingredientIncludeQuery);
     }else if (filterObj.filter_ingredient_only && filterObj.filter_ingredient_only.length > 0) {
         ingredientIncludeQuery =  {$expr:{$setIsSubset:["$ingredients.ingredient_name",filterObj.filter_ingredient_only]}},{_id:0};
